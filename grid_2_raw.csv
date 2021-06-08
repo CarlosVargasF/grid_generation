@@ -1,0 +1,11 @@
+TRAIN	0	0	accueil	train@accueil
+VOYAGER	1	0	accueil	voyager@accueil
+BOIRE	2	0	accueil	boire@accueil
+SALLE	0	1	accueil	salle@accueil
+CHAISE	1	1	accueil	chaise@accueil
+TU	2	1	accueil	tu@accueil
+AVION	0	2	accueil	avion@accueil
+JE	1	2	accueil	je@accueil
+ENFANT	3	0	accueil	enfant@accueil
+MAISON	3	1	accueil	maison@accueil
+ELLE	3	2	accueil	elle@accueil
