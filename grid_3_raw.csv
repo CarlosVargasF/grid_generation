@@ -1,0 +1,26 @@
+JE	1	1	accueil	je@accueil
+VOYAGER	2	1	accueil	voyager@accueil
+BOIRE	3	1	accueil	boire@accueil
+BUS	1	2	accueil	bus@accueil
+CHAISE	2	2	accueil	chaise@accueil
+TRAIN	3	2	accueil	train@accueil
+AVION	1	3	accueil	avion@accueil
+POMME	2	3	accueil	pomme@accueil
+TRAVAIL	3	3	accueil	travail@accueil
+ECOLE	1	4	accueil	ecole@accueil
+MAISON	2	4	accueil	maison@accueil
+ELLE	3	4	accueil	elle@accueil
+			elle@accueil	annexe
+TRAIN	1	1	annexe	train@annexe
+IL	2	1	annexe	il@annexe
+CHIEN	3	1	annexe	chien@annexe
+SALLE	1	2	annexe	salle@annexe
+ALLER	2	2	annexe	aller@annexe
+TU	3	2	annexe	tu@annexe
+MANGER	1	3	annexe	manger@annexe
+VOYAGER	2	3	annexe	voyager@annexe
+AIMER	3	3	annexe	aimer@annexe
+ENFANT	1	4	annexe	enfant@annexe
+JE	2	4	annexe	je@annexe
+RETOUR	3	4	annexe	retour@annexe
+			retour@annexe	accueil
