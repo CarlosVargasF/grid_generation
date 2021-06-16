@@ -1,0 +1,12 @@
+JE	1	1	accueil	je@accueil
+IL	2	1	accueil	il@accueil
+CHIEN	3	1	accueil	chien@accueil
+BUS	1	2	accueil	bus@accueil
+ALLER	2	2	accueil	aller@accueil
+TRAIN	3	2	accueil	train@accueil
+MANGER	1	3	accueil	manger@accueil
+VOYAGER	2	3	accueil	voyager@accueil
+AIMER	3	3	accueil	aimer@accueil
+ENFANT	1	4	accueil	enfant@accueil
+MAISON	2	4	accueil	maison@accueil
+ELLE	3	4	accueil	elle@accueil

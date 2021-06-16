@@ -1,0 +1,9 @@
+I	1 1	home	je@home
+HOUSE	3 1	home	house@home
+BUS	1 2	home	bus@home
+SPEAK	2 2	home	speak@home
+MEALS_D	3 2	home	meals_d@home
+		meals_d@home	meals
+STEAK	1 1	meals	steak@meals
+PIZZA	2 2	meals	pizza@meals
+PASTA	3 3	meals	pasta@meals
