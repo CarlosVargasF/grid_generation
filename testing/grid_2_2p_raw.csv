@@ -1,0 +1,16 @@
+TRAIN	1	1	accueil	train@accueil
+VOYAGER	2	1	accueil	voyager@accueil
+TOILETTE	3	1	accueil	toilette@accueil
+SALLE	1	2	accueil	salle@accueil
+CHAISE	2	2	accueil	chaise@accueil
+BUREAU	3	2	accueil	bureau@accueil
+AVION	1	3	accueil	avion@accueil
+JE	2	3	accueil	je@accueil
+PLUS	3	3	accueil	plus@accueil
+			plus@accueil	personnes
+HOMME	1	1	personnes	homme@personnes
+FEMME	2	1	personnes	femme@personnes
+VOYAGER	3	1	personnes	voyager@personnes
+RELIGION	1	2	personnes	religion_r@personnes			
+RETOUR	3	3	personnes	retour@personnes
+			retour@personnes	accueil
