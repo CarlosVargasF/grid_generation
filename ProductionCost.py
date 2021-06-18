@@ -12,7 +12,7 @@ import pickle
 # matplotlib package et pyplot pour la visualisation
 import matplotlib.pyplot as plt
 
-phraseEntree = "phrasesEntrée.txt"
+phraseEntree = "phrase.txt"
 resultat = "Resultat.txt"
 fichierDistances = "ArcsEtDistances.csv"
 

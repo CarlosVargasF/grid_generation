@@ -1,0 +1,32 @@
+je	1	2	sport	je@accueil
+			je@accueil	extra_459
+salle	1	2	accueil	salle@accueil
+avion	1	3	accueil	avion@accueil
+avion	2	1	accueil	avion@accueil**
+chaise	2	2	accueil	chaise@accueil
+voyager	3	2	personnes	voyager@accueil
+toilette	3	1	accueil	toilette@accueil
+bureau	3	2	accueil	bureau@accueil
+homme	1	1	personnes	homme@personnes
+tennis	2	2	sport	tennis@sport
+je	2	3	sport	je@sport
+retour	3	3	sport	retour@sport
+			retour@sport	personnes
+sport_r	1	2	personnes	sport_r@animaux
+			sport_r@animaux	sport
+chat	2	1	personnes	chat@animaux
+voyager	3	1	personnes	voyager@personnes
+retour	3	3	personnes	retour@animaux
+			retour@animaux	accueil
+animaux_r	3	3	accueil	animaux_r@accueil
+			animaux_r@accueil	personnes
+train	1	3	personnes	train@accueil
+bus	2	2	personnes	bus@accueil
+camion	2	3	personnes	camion@accueil
+moto	1	1	sport	moto@accueil
+velo	1	3	sport	velo@accueil
+train	2	1	sport	train@accueil**
+plus	3	1	sport	plus@accueil
+chien	3	2	sport	chien@animaux
+religion	1	1	extra_459	religion@personnes
+femme	1	2	extra_459	femme@personnes
