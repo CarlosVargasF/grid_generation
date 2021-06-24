@@ -10,7 +10,6 @@ PLUS	3	3	accueil	plus@accueil
 			plus@accueil	personnes
 HOMME	1	1	personnes	homme@personnes
 FEMME	2	1	personnes	femme@personnes
-VOYAGER	3	1	personnes	voyager@personnes
 RELIGION	1	2	personnes	religion_r@personnes			
 RETOUR	3	3	personnes	retour@personnes
 			retour@personnes	accueil
