@@ -1,3 +1,4 @@
+RIEN	0	0	accueil	rien@accueil
 JE	1	1	accueil	je@accueil
 AVION	2	1	accueil	avion@accueil
 VELO	3	1	accueil	velo@accueil
@@ -12,9 +13,9 @@ CHIEN	1	1	animaux	chien@animaux
 CHAT	2	1	animaux	chat@animaux
 SPORT_R	1	2	animaux	sport_r@animaux
 			sport_r@animaux	sport
-RETOUR	3	3	animaux	retour@animaux
-			retour@animaux	accueil
+RETOUR_R	3	3	animaux	retour_r@animaux
+			retour_r@animaux	accueil
 TENNIS	2	2	sport	tennis@sport
 JE	2	3	sport	je@sport
-RETOUR	3	3	sport	retour@sport
-			retour@sport	animaux
+RETOUR_R	3	3	sport	retour_r@sport
+			retour_r@sport	animaux
