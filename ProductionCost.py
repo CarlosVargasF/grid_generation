@@ -117,11 +117,11 @@ edgeList = tableau associatif de tous les arcs avec en clé le noeud tête et en
 
 def initialNode(text, nodeList, edgeList):
     path = []
-    startNode = "accueil"
     stock = []
-    totalWeight = 0
     # On parcours le fichier texte
     for line in text:
+        totalWeight = 0
+        startNode = "accueil"
         line = line.lower()
         line = line.strip()
         # On évite les lignes vides
@@ -246,7 +246,7 @@ def shortestPath(initialNode, sentance, nodeList, edgeList):
 
         # On calcule la somme des poids entre les arcs
         totalWeight += minWeight
-
+        print(f'minWeight={minWeight}')
     # On applique à nouveau une recherche du plus court chemin dans le sous graphe
     try:
         shortestpath = nx.shortest_path(coupleGraphe, source="accueil", target="end")
