@@ -550,28 +550,80 @@ class Grid():
       result_page = copy.deepcopy(page1)
       picto_dict = result_page.get_pictograms()
 
-      # chercher et m-à-j le picto de retour.
+      # # chercher et m-à-j le picto de retour.
+      # for picto in picto_dict.values():
+      #   if (picto[0] == 'retour_r') and (picto[1] == row_size - 1) and (picto[2] == col_size - 1):
+      #     if parent:
+      #       picto_dict[f'retour_r@{result_page.get_name()}'][4] = parent.get_name()
+      #       # print('Pictogram de retour mise à jour')
+      # attributes.update(picto_dict)
+      
+      # return attributes, result_page, {}
+
+      # m-à-j du picto_dict
+      for id, picto1 in picto_dict.items():
+            # réviser les duplicatas
+            if id in attributes:
+              id = f'{id}**'
+            
+            attributes[id] = picto1
+
       for picto in picto_dict.values():
+        # chercher et m-à-j le picto de retour.
         if (picto[0] == 'retour_r') and (picto[1] == row_size - 1) and (picto[2] == col_size - 1):
           if parent:
             picto_dict[f'retour_r@{result_page.get_name()}'][4] = parent.get_name()
             # print('Pictogram de retour mise à jour')
-      attributes.update(picto_dict)
+        else:
+          slot = result_page.get_slot(picto[1], picto[2])
+          dest = slot.get_page_destination()
+
+          #déterminer (recursivement) les pictos liés à la destination de chaque slot
+          attribs, selected_dest_page, unalloc = self.cross_pages(dest, None, result_page)
+
+          # m-à-j de attributes
+          for pict_id, picto2 in attribs.items():
+            # réviser les duplicatas
+            if pict_id in attributes:
+              pict_id = f'{pict_id}**'
+            
+            attributes[pict_id] = picto2  
       
-      return attributes, result_page, {}
+      return attributes, result_page, {}      
     
     # cas 3: seul page2 existe
     if page2 and (not page1):        
       result_page = copy.deepcopy(page2) 
       picto_dict = result_page.get_pictograms()
 
-      # chercher et m-à-j le picto de retour.
+      # m-à-j du picto_dict
+      for id, picto1 in picto_dict.items():
+            # réviser les duplicatas
+            if id in attributes:
+              id = f'{id}**'
+            
+            attributes[id] = picto1
+
       for picto in picto_dict.values():
+        # chercher et m-à-j le picto de retour.
         if (picto[0] == 'retour_r') and (picto[1] == row_size - 1) and (picto[2] == col_size - 1):
           if parent:
             picto_dict[f'retour_r@{result_page.get_name()}'][4] = parent.get_name()
             # print('Pictogram de retour mise à jour')
-      attributes.update(picto_dict)
+        else:
+          slot = result_page.get_slot(picto[1], picto[2])
+          dest = slot.get_page_destination()
+
+          #déterminer (recursivement) les pictos liés à la destination de chaque slot
+          attribs, selected_dest_page, unalloc = self.cross_pages(None, dest, result_page)
+
+          # m-à-j de attributes
+          for pict_id, picto2 in attribs.items():
+            # réviser les duplicatas
+            if pict_id in attributes:
+              pict_id = f'{pict_id}**'
+            
+            attributes[pict_id] = picto2  
       
       return attributes, result_page, {}
 
@@ -667,8 +719,9 @@ class Grid():
 
           #m-à-j des attributes des pictogrammes de la page résultante
           if selected_slot:
-            selected_slot.set_page_destination(selected_dest_page)
             word = selected_slot.get_word()
+            selected_slot = Slot(word, False, selected_dest_page)
+            result_page.set_slot(selected_slot, row, col)
 
             #ajouter les pictos des pages de destination
             attributes.update(attribs)
@@ -691,6 +744,19 @@ class Grid():
           # mettre en place le picto selectionné dans la page résultante 
           result_page.set_slot(selected_slot, row, col)     
     
+    print()
+    if page1 and page2:
+      print(f'CROSSED: {page1.get_name()} <-> {page2.get_name()}')
+    elif page1:
+      print(f'CROSSED: {page1.get_name()} <-> Nothing')
+    else:
+      print(f'CROSSED: Nothing <-> {page2.get_name()}')
+
+    print()
+    for k,p in attributes.items():
+      print(f'{k}:{p}')
+    print()
+
     return attributes, result_page, unallocated_pictos
   
   def fusion_with(self, grid):
