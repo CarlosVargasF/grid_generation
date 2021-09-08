@@ -17,6 +17,7 @@ import random
 import copy
 #from ipywidgets import GridspecLayout, Button, Layout
 import math
+import numpy as np
 import sys
 from graphviz import Digraph
 import pylab
@@ -353,7 +354,24 @@ class Grid():
 
     core_voc_dict = self.get_core_voc()
 
-    for page in self.get_page_dict().values():
+    # Valider que la première page de la grille soit l'accueil, sinon la remettre à la tête du tableau
+    pages_dict = self.get_page_dict()
+    first_page_name = list(pages_dict.keys())[0]
+    if first_page_name != 'accueil':
+      # 1. convertir le tableau d'attribs à une liste de tuples 
+      tuples = list(pages_dict.items())
+      # 2. trouver l'indice de l'accueil dans le tableau d'attribs
+      counter = 0
+      for page_name in pages_dict:
+        if page_name == 'accueil':
+          break
+        counter+=1
+      # 3. placer la page d'accueil comme premier element de la liste de tuples
+      tuples[0], tuples[counter] = tuples[counter], tuples[0]
+      # 4. reconvertir la liste de tuples en tableau
+      pages_dict = dict(tuples)
+
+    for page in pages_dict.values():
       if page.get_name() != extra_page.get_name():
         for row in range(1, page.get_row_size()):
           for col in range(1, page.get_col_size()):
@@ -532,7 +550,7 @@ class Grid():
       row_size = page2.get_row_size()
       col_size = page2.get_col_size()
     
-    new_page_name_suffix = random.randint(0,1000)
+    new_page_name_suffix = random.randint(0,10000)
 
     # tableau de tous les attributs des pictogrammes de la page résultante
     attributes = {}
@@ -629,8 +647,6 @@ class Grid():
 
     # cas 4: les deux pages existent
     if page1 and page2:
-
-      print(f'CROSSING: {page1.get_name()} - {page2.get_name()}')
 
       # décider le nom du page à retenir
       if random.randint(0,1):
@@ -744,18 +760,18 @@ class Grid():
           # mettre en place le picto selectionné dans la page résultante 
           result_page.set_slot(selected_slot, row, col)     
     
-    print()
-    if page1 and page2:
-      print(f'CROSSED: {page1.get_name()} <-> {page2.get_name()}')
-    elif page1:
-      print(f'CROSSED: {page1.get_name()} <-> Nothing')
-    else:
-      print(f'CROSSED: Nothing <-> {page2.get_name()}')
+    # print()
+    # if page1 and page2:
+    #   print(f'CROSSED: {page1.get_name()} <-> {page2.get_name()}')
+    # elif page1:
+    #   print(f'CROSSED: {page1.get_name()} <-> Nothing')
+    # else:
+    #   print(f'CROSSED: Nothing <-> {page2.get_name()}')
 
-    print()
-    for k,p in attributes.items():
-      print(f'{k}:{p}')
-    print()
+    # print()
+    # for k,p in attributes.items():
+    #   print(f'{k}:{p}')
+    # print()
 
     return attributes, result_page, unallocated_pictos
   
@@ -768,20 +784,20 @@ class Grid():
 
     attributes_dict, result_page, unalloc_dict = self.cross_pages(current_accueil, foreing_accueil)    
 
-    print('UNALLOCATED :\n')
-    print(unalloc_dict)
+    # print('UNALLOCATED :\n')
+    # print(unalloc_dict)
   
     row_size = self.get_row_size()
     col_size = self.get_col_size()
     new_grid = Grid(attributes_dict, row_size, col_size)
 
-    print('--------------------------------------------')
-    print(f'NEW_GRID AVANT REMPLISSAGE ET CRÉATION DES PAGES EXTRA')
-    print()
-    new_grid.display('before')
-    for k,p in new_grid.get_core_voc().items():
-      print(f'{k}:{p}')
-    print('------------------------------------------')
+    # print('--------------------------------------------')
+    # print(f'NEW_GRID AVANT REMPLISSAGE ET CRÉATION DES PAGES EXTRA')
+    # print()
+    # new_grid.display('before')
+    # for k,p in new_grid.get_core_voc().items():
+    #   print(f'{k}:{p}')
+    # print('------------------------------------------')
     
 
     # remplir slots vides avec les pictos non affectées
@@ -790,7 +806,7 @@ class Grid():
         for col in range(1, col_size):
           slot = page.get_slot(row, col)
           if not slot:
-            print(f'{slot}')
+            # print(f'{slot}')
             try:
               # renvoyer l'id du pictgramme non affecté suivant
               id_next_unalloc_picto = next(iter(unalloc_dict))
@@ -806,7 +822,7 @@ class Grid():
               slot = Slot(word, False, None)
               page.set_slot(slot, row, col)
               
-              print(f'slot vide affecté: page:{page.get_name()}, row: {row}, col: {col}, word: {word}')
+              # print(f'slot vide affecté: page:{page.get_name()}, row: {row}, col: {col}, word: {word}')
 
               #m-à-j du dict d'attriburtes de la nouvelle grille
               new_grid.get_core_voc()[id_next_unalloc_picto] = [word, row, col, page.get_name(), None]     
@@ -866,6 +882,11 @@ class Grid():
     '''Mélange les pictogrammes à l'intérieure de chaque page de la grille'''
 
     core_voc_copy = copy.deepcopy(self.get_core_voc())
+
+    print()
+    print(f'VOC_AVANT : {core_voc_copy}')
+    print()
+
     # new_grid_core_voc = new_grid.get_core_voc()
     row_size = self.get_row_size()
     col_size = self.get_col_size()
@@ -893,8 +914,15 @@ class Grid():
             try:          
               row, col = coords_list.pop()
             except:
+              print('INFO_VOC:')
               for i in info:
                 print(i)
+              print()
+              print('SELF_VOC:')
+              for k,i in self.get_core_voc().items():
+                print(k, i)
+              
+              self.display('shuffle_1')
               raise Exception('PROBLEM')
             # slot = Slot(picto[0], False, self.get_page(picto[4]))
             # new_grid.get_page(page_name).set_slot(slot, row, col)
@@ -902,7 +930,6 @@ class Grid():
             #affecter les nouvelles coordonnées aux pictos de la pag courante
             core_voc_copy[id][1] = row
             core_voc_copy[id][2] = col
-
     
     return Grid(core_voc_copy, row_size, col_size)
 
@@ -961,6 +988,8 @@ class Grid():
             #ajouter lien entre picto directoire et la page correspondante 
             if dest:              
               graph.edge(f'{page_name}:{slot_index}', f'{dest.get_name()}')
+          elif row == 0 and col == 0:
+            word = page_name.upper()
           else:
             word = ''
 
@@ -1096,8 +1125,8 @@ def initialNode(text, nodeList, edgeList, G):
             # On récupère le plus court chemin
             words = shortestPath(startNode, line, nodeList, edgeList, G)
 
-            if words == -1:
-              return list([-1])
+            # if words == -1:
+            #   return list([-1])
 
             path = words.path
             # On récupère le dernier élément de la liste
@@ -1188,14 +1217,13 @@ def shortestPath(initialNode, sentance, nodeList, edgeList, G):
             for firstNode in initialNodes:
                 # On extrait le plus court chemin entre le premier noeud et le candidat avec la fonctionn "shortest_path "fonction Networkx
                 try:
-                    graph = Digraph(filename='GGGG',format='png',comment='TEST_1')
+                    # graph = Digraph(filename='GGGG',format='png',comment='TEST_1')
                     path = nx.shortest_path(G, source=firstNode, target=candidate)
                 except nx.NetworkXNoPath:
                     
-                    PB = True
                     print ("No path between %s and %s." % (firstNode, candidate))
 
-                    return -1
+                    # return -1
 
                     # plt.clf()
                     # pos = nx.spring_layout(G, k=0.85, iterations=20)                    
@@ -1227,7 +1255,9 @@ def shortestPath(initialNode, sentance, nodeList, edgeList, G):
         index = index + 1
 
         # On calcule la somme des poids entre les arcs
-        totalWeight += minWeight   
+        totalWeight += minWeight
+
+        # print(f'MinWeight = {minWeight}')  
     
     # On applique à nouveau une recherche du plus court chemin dans le sous graphe
     try:        
@@ -1323,8 +1353,6 @@ from deap import base
 from deap import creator
 from deap import tools
 
-PB = False
-
 # CX_PROB  est la probabilité avec laquelle deux individus se croisent
 # MUT_PROB est la probabilité de mutation d'un individu
 CX_PROB, MUT_PROB = 0.9, 0.9    ## todo: choisir les probs
@@ -1334,12 +1362,12 @@ CX_PROB, MUT_PROB = 0.9, 0.9    ## todo: choisir les probs
 SCORE_THRESHOLD, MAX_ITER = 7.0, 5
 
 # Dimensions des grilles
-ROW_SIZE = 3
-COL_SIZE = 3
+ROW_SIZE = 4
+COL_SIZE = 4
 
 # phrase d'entrée
 # sentence = 'je voyager train'
-sentence = 'a b c'
+sentence = 'je voyager train'
 
 def init_grid(container, source_file):
   
@@ -1351,7 +1379,7 @@ def init_population(container, func, source_file_list):
 
 #Créer le container pour la fonction de coût et les individus
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))      ##todo: arrange weights quand plusieurs fitnesses (sentences) 
-creator.create("Individual", Grid, fitness=creator.FitnessMax)
+creator.create("Individual", Grid, fitness=creator.FitnessMax, best_path=[])
 
 # Initialisateurs
 toolbox = base.Toolbox()
@@ -1362,44 +1390,43 @@ toolbox.register("population", init_population, list, toolbox.individual)
 def evalProdCost(sentence, individual):
   distances = compute_distances(individual)
   cost = compute_cost(sentence, distances)
+  # path = result[0][0]
+  # cost = result[0][1]
   
-  if len(cost) == 1:
-    if cost[0] == -1:
-      print([(k,p) for k,p in individual.get_core_voc().items()])
-      return individual.display('bug')
-
-  # if PB:
-  #   print(individual.get_page_names())
-  #   individual.display()
-  #   sys.exit(1)
+  individual.best_path = cost[0][0]
+  
+  # if len(cost) == 1:
+  #   if cost[0] == -1:
+  #     print([(k,p) for k,p in individual.get_core_voc().items()])
+  #     return individual.display('bug')
           
   return cost[0][1],    ##todo: plusieurs sentences
 
 # Fonction de fusion externe(fusion)
 def external_fusion(individual1, individual2):
-  print('INDIVIDUAL 1 ************************')
-  print(individual1)
-  for k,p in individual1.get_core_voc().items():
-    print(f'{k}:{p}')
-  print()
-  individual1.display('ind_1')
-  print('INDIVIDUAL 2 ************************')
-  print(individual2)
-  for k,p in individual2.get_core_voc().items():
-    print(f'{k}:{p}')
-  print()
-  individual2.display('ind_2')
-  print('NEW GRID ****************************')
+  # print('INDIVIDUAL 1 ************************')
+  # print(individual1)
+  # for k,p in individual1.get_core_voc().items():
+  #   print(f'{k}:{p}')
+  # print()
+  # individual1.display('ind_1')
+  # print('INDIVIDUAL 2 ************************')
+  # print(individual2)
+  # for k,p in individual2.get_core_voc().items():
+  #   print(f'{k}:{p}')
+  # print()
+  # individual2.display('ind_2')
+  # print('NEW GRID ****************************')
   new_grid = individual1.fusion_with(individual2)
-  print()
-  print(new_grid)
-  for k,p in new_grid.get_core_voc().items():
-    print(f'{k}:{p}')
-  print()
-  new_grid.display('new_ind')
+  # print()
+  # print(new_grid)
+  # for k,p in new_grid.get_core_voc().items():
+  #   print(f'{k}:{p}')
+  # print()
+  # new_grid.display('new_ind')
 
   
-  input("Press Enter to continue...")
+  # input("Press Enter to continue...")
 
   return toolbox.individual(new_grid.get_core_voc())
 
@@ -1433,6 +1460,9 @@ def main(files):
   # Extraction de toutes les fitnesses
   fits = [ind.fitness.values[0] for ind in pop]
 
+  # # Extraction de tous les chemins optimales
+  # optimal_paths = [ind]
+
   # Variable permettant de suivre le nombre de générations
   g = 0
 
@@ -1452,34 +1482,35 @@ def main(files):
 
     # Appliquer le crossover et la mutation sur la progéniture ***
 
+    # CROSSOVER (FUSION)
     new_cx_individuals = []
     for child1, child2 in zip(offspring[::2], offspring[1::2]):
       if random.random() < CX_PROB:
         n_ind = toolbox.mate(child1, child2)
 
+        check_voc(n_ind.get_core_voc(), n_ind)
+        
         new_cx_individuals.append(n_ind)
 
-        # check_missing(n_ind)
-        
         # del child1.fitness.values
         # del child2.fitness.values
 
     # m-à-j offspring    
     offspring.extend(new_cx_individuals)
 
+    # MUTATION (REORGANISATION INTERNE)
     # new_mut_individuals = []
     # for mutant in offspring:
     #   if random.random() < MUT_PROB:
     #     n_ind = toolbox.mutate(mutant)
     #     new_mut_individuals.append(n_ind)
 
-    #     # check_voc(n_ind.get_core_voc())
     #     # del mutant.fitness.values
 
-    # # m-à-j offspring 
+    # m-à-j offspring 
     # offspring.extend(new_mut_individuals)
 
-    # Evaluer les individus avec une fitness invalide ***
+    # Evaluer les individus sans fitness calculée (fitness invalide) ***
     invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
     fitnesses = map(toolbox.evaluate, invalid_ind)
     for ind, fit in zip(invalid_ind, fitnesses):
@@ -1498,6 +1529,37 @@ def main(files):
   sum2 = sum(x*x for x in fits)
   std = abs(sum2 / length - mean**2)**0.5
 
+  # indice de l'individu avec la fitness la plus optimale
+  index_min = np.argmin(fits)
+
+  # indice de l'individu avec la pire fitness
+  index_max = np.argmax(fits)
+
+  indiv_min = pop[index_min]
+  indiv_max = pop[index_max]  
+
+  abs_path = '/home/fran/mosig/internship/grid_gen/data/'
+  c = 0
+  print()
+  for ind in pop:
+    print(f'Path_{c}: {ind.best_path}')
+    ind.display(f'img/ind_{c}')
+
+    with open(f'{abs_path}ind_{c}.csv', 'w') as f:
+      # print(f'Path_{c}: {ind.best_path}', file=f)
+      # print(file=f)
+      for k,i in ind.get_core_voc().items():
+        print(k, i, file=f)
+    c+=1
+  print()
+
+  # ind_min.display('MIN')
+  # ind_max.display('MAX')
+
+  print()
+  print(fits)
+  print()
+
   print("  Min %s" % min(fits))
   print("  Max %s" % max(fits))
   print("  Avg %s" % mean)
@@ -1507,51 +1569,31 @@ def main(files):
 
 
 # TESTING
+
+import pandas as pd
+pd.set_option('display.max_rows', 100)
+
+def check_voc(dict_att,grid):
+
+  df = pd.DataFrame(dict_att.values(), columns=['word', 'row', 'col', 'page', 'dest'])
+  df2 = df.groupby(['row', 'col', 'page']).size()
+  if sum(df2.values) != len(df2.values):
+    print(pd.DataFrame.from_dict(grid.get_core_voc(), orient='index').sort_values([3]))
+    raise Exception('COORDONÉES REPÉTÉES')
+  print('OK...!')
+
+
 ## TEST PIPELINE
 
 path1 = '/home/fran/mosig/internship/grid_gen/testing/'
 
 # noms des fichiers texte (corpus) de chaque grille 
-# files = [f'{path1}grid_1_3p_raw.csv', f'{path1}grid_2_3p_raw.csv']
-files = [f'{path1}g1_letters.csv', f'{path1}g2_letters.csv']
+files = [f'{path1}grid_1_3p_raw.csv', f'{path1}grid_2_3p_raw.csv', f'{path1}grid_3_6p_raw.csv', f'{path1}grid_4_2p_raw.csv']
+
+# files = [f'{path1}g1_letters.csv', f'{path1}g2_letters.csv']
 # files = [f'{path1}grid_1_3p_raw.csv', f'{path2}Corrected_proloquo_FR_brut.csv']
 
 main(files)
 
-#****************************************************************************************************************
 
-# pd.set_option('display.max_rows', 100)
 
-# def check_voc(dict_att):
-
-#   df = pd.DataFrame(dict_att.values(), columns=['word', 'row', 'col', 'page', 'dest'])
-#   df2 = df.groupby(['row', 'col', 'page']).size()
-#   if sum(df2.values) != len(df2.values):
-#     print(pd.DataFrame.from_dict(grid.get_core_voc(), orient='index').sort_values([3]))
-#     raise Exception('COORDONÉES REPÉTÉES')
-
-# #****************************************************************************************************************
-
-# def check_missing(d): 
-#   exist=False
-#   for n in d.get_core_voc():
-#     if 'voyager' in n:
-#       exist = True
-#   if not exist:
-#     df = pd.DataFrame(d.get_core_voc().values(), columns=['word', 'row', 'col', 'page', 'dest']).sort_values('page')
-#     print(df)
-#     d.display()
-#     print('check_missing_signal..........!')
-    # sys.exit(1)
-
-#****************************************************************************************************************
-#test fonction compute_distances
-
-#méthode conventionelle (script)
-# %run -i 'distanceCalculation.py' -in 'testing/grid_2_2p_raw.csv' -out 'testing/test_dist.csv'
-
-# nouvelle méthode (fonction)
-# grid = Grid('testing/grid_2_2p_raw.csv')
-# dist = compute_distances(grid)
-# nlines = dist.count('\n')
-# nlines
