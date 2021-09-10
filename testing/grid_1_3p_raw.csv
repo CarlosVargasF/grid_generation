@@ -1,20 +1,21 @@
-RIEN	0	0	accueil	rien@accueil
 JE	1	1	accueil	je@accueil
-AVION	2	1	accueil	avion@accueil
-VELO	3	1	accueil	velo@accueil
 BUS	1	2	accueil	bus@accueil
-MOTO	2	2	accueil	moto@accueil
-TRAIN	3	2	accueil	train@accueil
 CAMION	1	3	accueil	camion@accueil
+AVION	2	1	accueil	avion@accueil
+MOTO	2	2	accueil	moto@accueil
 VOYAGER	2	3	accueil	voyager@accueil
+VELO	3	1	accueil	velo@accueil
+TRAIN	3	2	accueil	train@accueil
 ANIMAUX_R	3	3	accueil	animaux_r@accueil
 			animaux_r@accueil	animaux
+
 CHIEN	1	1	animaux	chien@animaux
-CHAT	2	1	animaux	chat@animaux
 SPORT_R	1	2	animaux	sport_r@animaux
+CHAT	2	1	animaux	chat@animaux
 			sport_r@animaux	sport
 RETOUR_R	3	3	animaux	retour_r@animaux
 			retour_r@animaux	accueil
+
 TENNIS	2	2	sport	tennis@sport
 JE	2	3	sport	je@sport
 RETOUR_R	3	3	sport	retour_r@sport

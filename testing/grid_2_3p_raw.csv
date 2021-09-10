@@ -1,22 +1,24 @@
-TRAIN	1	1	accueil	train@accueil
-VOYAGER	2	1	accueil	voyager@accueil
-TOILETTE	3	1	accueil	toilette@accueil
+VOITURE	1	1	accueil	voiture@accueil
 SALLE	1	2	accueil	salle@accueil
-CHAISE	2	2	accueil	chaise@accueil
-BUREAU	3	2	accueil	bureau@accueil
 AVION	1	3	accueil	avion@accueil
+NAGER	2	1	accueil	nager@accueil
+CHAISE	2	2	accueil	chaise@accueil
 JE	2	3	accueil	je@accueil
-PLUS	3	3	accueil	plus@accueil
-			plus@accueil	personnes
+TOILETTE	3	1	accueil	toilette@accueil
+BUREAU	3	2	accueil	bureau@accueil
+PLUS_R	3	3	accueil	plus_r@accueil
+			plus_r@accueil	personnes
+
 HOMME	1	1	personnes	homme@personnes
-FEMME	2	1	personnes	femme@personnes
-VOYAGER	3	1	personnes	voyager@personnes
 RELIGION_R	1	2	personnes	religion_r@personnes
 			religion_r@personnes	religion
-RETOUR	3	3	personnes	retour@personnes
-			retour@personnes	accueil
+FEMME	2	1	personnes	femme@personnes
+VOYAGER	3	1	personnes	voyager@personnes
+RETOUR_R	3	3	personnes	retour_r@personnes
+			retour_r@personnes	accueil
+
 PRIERE	1	1	religion	priere@religion
 EGLISE	2	1	religion	eglise@religion
 TRAIN	3	2	religion	train@religion
-RETOUR	3	3	religion	retour@religion
-			retour@religion	personnes
+RETOUR_R	3	3	religion	retour_r@religion
+			retour_r@religion	personnes

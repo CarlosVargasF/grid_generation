@@ -1,0 +1,17 @@
+// Test
+digraph {
+	node [shape=record]
+	accueil:5 -> maison
+	accueil:11 -> ecole
+	accueil:15 -> lieux
+	accueil [label="{  { <0>ACCUEIL |<1> |<2> |<3> } | { <4> |<5>maison_r |<6>fin |<7>avion } | { <8> |<9>voyager |<10>livre |<11>ecole_r } | { <12> |<13>garcon |<14>table |<15>lieux_r }  }"]
+	maison:15 -> accueil
+	maison [label="{  { <0>MAISON |<1> |<2> |<3> } | { <4> |<5> |<6>cuisine |<7>chambre } | { <8> |<9> |<10> |<11> } | { <12> |<13>savon |<14>eau |<15>retour_r }  }"]
+	ecole:15 -> accueil
+	ecole [label="{  { <0>ECOLE |<1> |<2> |<3> } | { <4> |<5>professeur |<6>devoir |<7> } | { <8> |<9>cahier |<10> |<11> } | { <12> |<13>je |<14> |<15>retour_r }  }"]
+	lieux:10 -> hopital
+	lieux:15 -> accueil
+	lieux [label="{  { <0>LIEUX |<1> |<2> |<3> } | { <4> |<5> |<6> |<7>parc } | { <8> |<9> |<10>hopital_r |<11> } | { <12> |<13>universite |<14>agence |<15>retour_r }  }"]
+	hopital:15 -> lieux
+	hopital [label="{  { <0>HOPITAL |<1> |<2> |<3> } | { <4> |<5> |<6>infirmiere |<7>docteur } | { <8> |<9>pacient |<10>maladie |<11>train } | { <12> |<13> |<14> |<15>retour_r }  }"]
+}

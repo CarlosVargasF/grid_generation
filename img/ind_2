@@ -1,0 +1,26 @@
+// Test
+digraph {
+	node [shape=record]
+	maison:15 -> accueil
+	maison [label="{  { <0>MAISON |<1> |<2> |<3> } | { <4> |<5>voiture |<6>cuisine |<7>chambre } | { <8> |<9>salle |<10>avion |<11>nager } | { <12> |<13>savon |<14>eau |<15>retour_r }  }"]
+	accueil:5 -> maison
+	accueil:6 -> extra_5317
+	accueil:7 -> extra_2857
+	accueil:11 -> ecole
+	accueil:15 -> personnes
+	accueil [label="{  { <0>ACCUEIL |<1> |<2> |<3> } | { <4> |<5>voiture |<6>fin |<7>avion } | { <8> |<9>nager |<10>chaise |<11>ecole_r } | { <12> |<13>toilette |<14>bureau |<15>lieux_r }  }"]
+	extra_5317:15 -> accueil
+	extra_5317 [label="{  { <0>EXTRA_5317 |<1> |<2> |<3> } | { <4> |<5>bureau |<6>plus_r |<7>homme } | { <8> |<9>religion_r |<10>priere |<11>eglise } | { <12> |<13>train |<14>femme |<15>retour_r }  }"]
+	extra_2857:15 -> accueil
+	extra_2857 [label="{  { <0>EXTRA_2857 |<1> |<2> |<3> } | { <4> |<5>voyager |<6> |<7> } | { <8> |<9> |<10> |<11> } | { <12> |<13> |<14> |<15>retour_r }  }"]
+	ecole:15 -> accueil
+	ecole [label="{  { <0>ECOLE |<1> |<2> |<3> } | { <4> |<5>professeur |<6>devoir |<7>chaise } | { <8> |<9>cahier |<10>je |<11>garcon } | { <12> |<13>je |<14>table |<15>retour_r }  }"]
+	personnes:6 -> religion
+	personnes:10 -> hopital
+	personnes:15 -> accueil
+	personnes [label="{  { <0>PERSONNES |<1> |<2> |<3> } | { <4> |<5>homme |<6>religion_r |<7>parc } | { <8> |<9>femme |<10>hopital_r |<11>plus_r } | { <12> |<13>universite |<14>agence |<15>retour_r }  }"]
+	religion:15 -> personnes
+	religion [label="{  { <0>RELIGION |<1> |<2> |<3> } | { <4> |<5>priere |<6>voyager |<7>maison_r } | { <8> |<9>eglise |<10>salle |<11>avion } | { <12> |<13>voyager |<14>train |<15>retour_r }  }"]
+	hopital:15 -> personnes
+	hopital [label="{  { <0>HOPITAL |<1> |<2> |<3> } | { <4> |<5>livre |<6>infirmiere |<7>docteur } | { <8> |<9>pacient |<10>maladie |<11>train } | { <12> |<13>je |<14>toilette |<15>retour_r }  }"]
+}

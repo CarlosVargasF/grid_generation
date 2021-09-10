@@ -1,0 +1,14 @@
+// Test
+digraph {
+	node [shape=record]
+	accueil:5 -> extra_9088
+	accueil:15 -> animaux
+	accueil [label="{  { <0>ACCUEIL |<1> |<2> |<3> } | { <4> |<5>train |<6>bus |<7>avion } | { <8> |<9>avion |<10>moto |<11>voyager } | { <12> |<13>toilette |<14>train |<15>plus_r }  }"]
+	extra_9088:15 -> accueil
+	extra_9088 [label="{  { <0>EXTRA_9088 |<1> |<2> |<3> } | { <4> |<5>sport_r |<6>chat |<7> } | { <8> |<9> |<10> |<11> } | { <12> |<13> |<14> |<15>retour_r }  }"]
+	animaux:9 -> sport
+	animaux:15 -> accueil
+	animaux [label="{  { <0>ANIMAUX |<1> |<2> |<3> } | { <4> |<5>chien |<6>salade |<7>je } | { <8> |<9>viande |<10>voyager |<11>salle } | { <12> |<13>camion |<14>femme |<15>retour_r }  }"]
+	sport:15 -> animaux
+	sport [label="{  { <0>SPORT |<1> |<2> |<3> } | { <4> |<5>chaise |<6>je |<7>velo } | { <8> |<9>bureau |<10>tennis |<11>je } | { <12> |<13>animaux_r |<14>carrote |<15>retour_r }  }"]
+}
