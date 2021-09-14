@@ -31,53 +31,93 @@ import pandas as pd
 
 
 class Slot():
+    '''Représente l'element le plus basique d'une grille.
+    
+    Il peut contenir un pictogramme ou être vide (None).
 
-    def __init__(self, word, is_core, page_destination):
-        '''
-        word : str que l'on souhaite traiter et placer sur la grille
-        is Core : Booléen un indiquant si le mot traité fait parti du vocabulaire core ou non
-        page_destination : page liée à ce slot
-        '''
+    :word: mot lié au pictpgramme
+    :type word: chaîne de caractères
+    :is_core: boolean qui indique si le mot associé fait partie du vocabulaire de base.
+    :type is_core: boolean
+    :page_destination: Eventuelle page de destination liée au pictogramme. Peut être nulle.
+    :type page_destination: class: `Page`
+    '''
+
+    def __init__(self, word, is_core, page_destination):        
+        '''Constructeur'''        
 
         self.__word = copy.copy(word)
         self.__is_core = copy.copy(is_core)
         self.__page_destination = copy.copy(page_destination)
 
-    # Accesseur
     def get_word(self):
+        '''Accesseur
+        
+        :return: Renvoi le mot lié au slot
+        :rtype: châine de charactères'''
 
         return self.__word
 
-    # Accesseur
     def get_is_core(self):
+        '''Accesseur
+
+        :return: Renvoi le boolean `is_core` du slot
+        :rtype: boolean'''
 
         return self.__is_core
 
     def get_page_destination(self):
+        '''Accesseur
+        
+        :return: Renvoi la page de destination du slot
+        :rtype: class: `Page`'''
 
         return self.__page_destination
 
     def set_word(self, word):
+        '''Setter. Mettre en place le mot du slot
+        
+        :word: mot à metre en place
+        :type word: chaîne de caractères
+        '''
 
         self.__word = word
 
     def set_page_destination(self, page):
+        '''Setter. Mettre en place la page de destination du slot
+        
+        :page: page à mettre en place
+        :type page: class: `Page`'''
 
         self.__page_destination = page
 
     def __str__(self):
+        '''Méthode de affichage du slot
+        
+        :return: Renvoi l'information du slot
+        :rtype: chaîne de charactères
+        '''
 
         dest = self.__page_destination
         if dest:
             dest = self.__page_destination.get_name()
-        # return '('+str(self.__word) + ';' + str(self.__is_core) + ';' + str(dest) + ')'
+
         return f'{self.__word}({dest})'
 
 
 class Page():
+    '''Une page est un arrangement 2D de slots avec une taille fixe
 
-    #Constructor
+    :param name: le nom de la page
+    :type name: chaîne de caractères
+    :param row_size: La hauteur de la table (nombre de lignes)
+    :type row_size: entier
+    :param col_size: La largueur de la table (nombre de colognes)
+    :type col_size: entier
+    '''
+
     def __init__(self, name, row_size, col_size):
+        '''Constructeur'''  
 
         self.__name = name
         self.__row_size = row_size
@@ -88,8 +128,9 @@ class Page():
         self.__last_R = 0
         self.__last_C = 0
 
-    #Initialise chacun des slots à None
+
     def __fill(self):
+      '''Initialise chacun des slots à None'''
 
       self.__slots = []
       for i in range(0, self.__row_size) :
@@ -97,8 +138,20 @@ class Page():
         for j in range(0, self.__col_size) :
           self.__slots[i].append(None)
 
-    # Ajoute le Slot slot en position num_row, num_col et renvoie l'ancienne valeur
+
     def set_slot(self, slot, num_row, num_col):
+      '''Setter. Ajoute le Slot `slot` en position `num_row`, `num_col` dans la page
+
+      :param slot: slot à mettre en place 
+      :type slot: class `Slot`
+      :param num_row: nombre de la ligne 
+      :type num_row: entier
+      :param num_col: nombre de la colonne
+      :type num_col: entier
+      :raises Exception: exception de dépassement des indices.
+      :return: renvoie l'ancienne valeur du slot
+      :rtype: class `Slot`
+      '''
 
       if (num_row >= self.__row_size) or (num_col >= self.__col_size):
         print(f'row={num_row}, col={num_col}')
@@ -111,41 +164,78 @@ class Page():
 
       return old_value
 
+
     def set_name(self, name):
+      '''Setter. Mettre en place le nom de la page
+
+      :param name: nom à mettre en place
+      :type name: chaîne de charactères
+      :return: renvoie le nom affecté
+      :rtype: chaîne de charactères
+      '''
       self.__name = name
 
       return name
 
-    # Accessors
+    
     def get_name(self):
+      '''Accesseur. 
+
+      :return: renvoie le nom actuel de la page
+      :rtype: chaîne de charactères
+      '''
 
       return self.__name
 
+
     def get_row_size(self):
+      '''Accesseur. 
+
+      :return: renvoie la hauteur de la page
+      :rtype: entier
+      '''
 
       return self.__row_size
 
+
     def get_col_size(self):
+      '''Accesseur. 
+
+      :return: renvoie la longueur de la page
+      :rtype: entier
+      '''
 
       return self.__col_size
 
+
     def get_slot(self, num_row, num_col):
+      '''Accesseur. 
+
+      :return: renvoie le slot affecté à la position `(num_row, num_col)` 
+      :rtype: class: `Slot`
+      '''
 
       return self.__slots[num_row][num_col]
 
-    def get_slot_by_name(self, name):
 
-      for row in range(0, self.__row_size):
-        for col in range (0, self.__col_size):
-          slot = self.__slots[row][col]
-          if slot:          
-            if slot.get_word() == name:
-              return slot
-          
-      print(f'*** slot {name} not found in page {self.__name} ***')
-      return None
+    def get_slot_list(self):
+      '''Accesseur
+
+      :return: renvoie la liste de slots de la page
+      :rtype: Liste de Slots
+      '''
+
+      return self.__slots
     
+
     def get_pictograms(self):
+      '''Obtiens les informations des pictogrammes dans la page
+
+      Produit un tableau d'attributes contenant toutes les informations (nom, ligne, colonne, nom de page, page de destination) de chaque pictogramme de la page courante.
+
+      :return: renvoie un tableau d'attributes 
+      :rtype: Dict
+      '''
 
       current_page_name = self.get_name()
       attributes = {}
@@ -161,36 +251,33 @@ class Page():
               dest_page_name = None
 
             id = f'{word}@{current_page_name}'
-            if id in attributes:
-              id = f'{id}**'
+            while id in attributes:
+              id = f'{id}*'
 
             attributes[id] = [word, row, col, current_page_name, dest_page_name]  
 
       return attributes
-      
-    # def get_slot_by_destination(self, dest):
-      
-    #   for row in range(0, self.__row_size):
-    #     for col in range (0, self.__col_size):
-    #       slot = self.__slots[row][col]
-    #       if slot:          
-    #         if slot.get_page_destination == dest:
-    #           return slot
-          
-    #   print(f'*** destination {dest} not found in any slot ofpage {self.__name} ***')
-    #   return None
 
-    def get_slot_list(self):
 
-      return self.__slots
-
-    #Return true if the slot at position (num_row, num_col) is free, false otherwise
     def is_free(self, num_row, num_col):
+      '''Retourne vrai si le slot à la position (`num_row`, `num_col`) est libre, faux sinon.
 
+      :param num_row: nombre de la ligne
+      :type num_row: entier
+      :param num_col: nombre de la colonne
+      :type num_col: entier
+      :return: renvoie un bolean
+      :rtype: bolean
+      '''
       return self.__slots[num_row][num_col] == None
 
-    #Return true if table is full, false otherwise
+
     def is_full(self):
+      '''Retourne vrai si la table est pleine (aucun slot vide), faux sinon
+
+      :return: renvoie un bolean 
+      :rtype: bolean
+      '''
 
       if (self.__full):
         return True
@@ -201,30 +288,52 @@ class Page():
       self.__full = True
       return True
 
+
     def add_word(self, word, core=False, dest=None) :
+      '''Crée et ajoute un slot(pictogramme) dans le prochain emplacement disponible de la page 
+      
+      Fonction récursive.
+
+      :param word: nom du mot du pictogramme
+      :type word: chaîne de charactères
+      :param core: indique si le mot est du voc de base, defaults to False
+      :type core: boolean, optional
+      :param dest: page de destination du pictogramme, defaults to None
+      :type dest: classe: `Page`, optional
+      :return: renvoie le nom du mot si affectation possible, null sinon 
+      :rtype: chaîne de charactères
+      '''
 
       if(self.__last_C == self.__col_size) : 
         self.__last_C = 0
         self.__last_R += 1
+
       if(self.__last_R == self.__row_size) :
         self.__full = True
         print("Failed to add word <", word, ">. The table is full.")
+
         return None
 
       if(self.__slots[self.__last_R][self.__last_C] == None) :
-
         s = Slot(word, core, dest)
         self.__slots[self.__last_R][self.__last_C] = s
         self.__last_R
         self.__last_C += 1
+
         return word
       
       self.__last_R
       self.__last_C += 1
+
       return self.add_word(word, dest=dest)
 
-    # Méthode d'affichage (à revoir ? Efficacité chaînes de caractères)
+    #  (à revoir ? Efficacité chaînes de caractères)
     def __str__(self):
+      '''Méthode d'affichage d'une page
+
+      :return: renvoie la structure de la page dans un format lisible
+      :rtype: chaîne de charactères
+      '''
 
       s = "Page: " + self.__name + "\n("
       for i in range(0, self.__row_size) : 
@@ -232,37 +341,27 @@ class Page():
           s+=str(self.__slots[i][j])
           s+=", "
         s+='\n'
+
       return s+')'
 
-    # fonction auxiliaire pour l'affichage
-    # def create_expanded_button(self, description, button_style):
-
-    #   return Button(description=description, button_style=button_style,
-    #               layout=Layout(height='auto', width='auto'))
-       
-    # Affichage alternative (couteaux, debug)
-    # def show(self):
-
-    #   grid = GridspecLayout(self.__row_size, self.__col_size, width='50%')
-
-    #   for i in range(self.__row_size):
-    #     for j in range(self.__col_size):
-    #       # grid[i, j] = self.create_expanded_button('Button {} - {}'.format(i, j), 'success')
-    #       if self.__slots[i][j]:
-    #         content = str(self.__slots[i][j])
-    #       else:
-    #         content = ''
-    #       grid[i, j] = self.create_expanded_button(content, 'success')            
-
-
-    #   return grid
-
-
-## Grid
+    
 class Grid():
+  '''Meta-classe représentant la structure complète d'un système de grilles de pictogrammes 
 
-  #Constructor
+  :param input_file: fichier/tableau source contenant toute l'information d'une grille 
+  :type input_file: fichier `.csv` en format `Augcom` (voir le repo du projet pour plus d'information),
+   ou tableau d'attributes décrivant chaque pictogramme avec le format: 
+   {`id_picto`: chaîne de charactères : [`nom`: chaîne de charactères, `ligne`: entier, `colonne`: entier,
+    `page`: chaîne de charactères, `destination`: chaîne de charactères]}
+  :param row_size: hauteur fixe de chaque page de la grille
+  :type row_size: entier
+  :param col_size: longueur fixe de chaque page de la grille
+  :type col_size: entier
+  :raises Exception: exception d'entrée incompatible  
+  '''
+
   def __init__(self, input_file, row_size, col_size):
+    '''Constructeur'''
 
     self.__row_size = row_size
     self.__col_size = col_size
@@ -272,59 +371,97 @@ class Grid():
     self.__fusion_id = 0
     self.__create_grid(input_file)
 
-  #ToDo
-  def add_word(word):
-
-    return
 
   def get_root_page(self):
+    '''Obtient la page racine, qui est par défaut la page nommé `accueil`
+
+    :return: renvoi la page d'accueil 
+    :rtype: classe: `Page`
+    '''
 
     return self.__pages.get('accueil')
 
-  # def __get_last_page(self):
-
-  #   return self.__pages[-1]
   
   def get_nb_pages(self):
+    '''Renvoie le nombre de pages contenues dans la grille
+
+    :return: nombre total de pages
+    :rtype: entier
+    '''
 
     return self.__pageCounter
   
+
   def get_page_names(self):
+    '''Renvoie la liste de noms de pages contenues dans la grille
+
+    :return: liste de noms
+    :rtype: Liste
+    '''
 
     return self.__pages.keys()
 
+
   def get_page(self, name):
+    '''Renvoie la page avec le nom `name` 
+
+    :param name: nom de la page à chercher
+    :type name: chaîne de charactères
+    :return: la page concernée
+    :rtype: classe: `Page`
+    '''
 
     return self.__pages.get(name) 
 
+
   def get_page_dict(self):
+    '''Renvoie le tableau de pages de la grille
+
+    :return: tableau de pages
+    :rtype: Dict (format: {`page_name`: chaine de charactères : `page`: classe `Page`})
+    '''
 
     return self.__pages
 
+
   def get_core_voc(self):
+    '''Renvoie le tableau d'attributes décrivant tous les pictogrammes
+
+    :return: tableau d'attributes
+    :rtype: Dict (format: {`id_picto`:[`nom`,`ligne`,`colonne`,`page`, `page_dest`]})
+    '''
 
     return self.__core_voc
 
+
   def get_row_size(self):
+    '''Renvoie la hauteur de la grille
+
+    :return: nombre de lignes
+    :rtype: entier
+    '''
 
     return self.__row_size
 
+
   def get_col_size(self):
+    '''Renvoie la longueur de la grille
+
+    :return: nombre de colonnes
+    :rtype: entier
+    '''
 
     return self.__col_size
 
-  # We assume that the word has not been already added
-  def add_word(self, word, dest=None):
-
-    # if self.__pages[-1].is_full() :
-
-    #   self.__add_page2()
-
-    # self.__pages[-1].add_word(word, dest=dest)
-
-    return
   
   def add_word_in_root(self, word, dest=None):
+    '''Ajoute un nouveau pictogramme à la page d'accueil dans la première position disponible
+
+    :param word: nom du pictogramme
+    :type word: chaîne de charactères
+    :param dest: page de destination du pictogramme, defaults to None
+    :type dest: classe `Page`, optional
+    '''
 
     accueil_page = self.__pages.get('accueil')
     if accueil_page.is_full() :
@@ -336,11 +473,29 @@ class Grid():
 
     return
 
+
   def add_new_page(self, name):
+    '''Fonction d'encapsulation 
+
+    Ajoute une nouvelle page à la grille
+
+    :param name: le nom de la nouvelle page
+    :type name: chaîne de charactères
+    :return: la page ajoutée
+    :rtype: classe: `Page`
+    '''
 
     return self.__add_page(name)
 
+
   def __add_page(self, name_page):
+    '''Ajoute une nouvelle page à la grille
+
+    :param name_page: le nom de la nouvelle page
+    :type name_page: chaîne de charactères
+    :return: la page ajoutée
+    :rtype: classe: `Page`
+    '''
 
     page = Page(name_page, self.__row_size, self.__col_size)    
     self.__pages[name_page] = page
@@ -348,9 +503,19 @@ class Grid():
 
     return page
 
+
+    ''''''
   def update_leaf_picto(self, extra_page):
-    '''Recherche le premier pictogramme qui n'a pas de page de destination et mettre en place extra_page
-        comme destination. Renvoie la page contenant le picto trouvé'''
+    '''Affecte la page `extra_page` à un pictogramme disponible
+
+    Recherche le premier pictogramme qui n'a pas de page de destination et mettre en place `extra_page` 
+    comme destination. 
+
+    :param extra_page: la page à affecter
+    :type extra_page: classe: `Page`
+    :return: Renvoie la page contenant le pictogramme trouvé.
+    :rtype: classe: `Page`
+    '''    
 
     core_voc_dict = self.get_core_voc()
 
@@ -371,6 +536,7 @@ class Grid():
       # 4. reconvertir la liste de tuples en tableau
       pages_dict = dict(tuples)
 
+    # Parcourir tous les slots de chaque page et affecter la page destination au 1er slot sans destination.
     for page in pages_dict.values():
       if page.get_name() != extra_page.get_name():
         for row in range(1, page.get_row_size()):
@@ -392,49 +558,29 @@ class Grid():
                 return page
 
 
+    '''  '''
   def __create_grid(self, input_file):
-    ''' Création d'une grille à partir d'un fichier texte ou d'un tableau d'attributes '''
+    '''Crée une grille à partir d'un fichier texte ou d'un tableau d'attributes
 
-    #références pour le calcul de row_size, col_size et destination
-    row_ref = 0
-    col_ref = 0
-    first_page = None
+    :param input_file: fichier/tableau source contenant toute l'information d'une grille 
+    :type input_file: fichier `.csv` en format `Augcom` (voir le repo du projet pour plus d'information), 
+    ou tableau d'attributes décrivant chaque pictogramme (format: {`id_picto`:[`nom`,`ligne`,`colonne`,`page`, `page_dest`]})    
+    :raises Exception: exception d'entrée incompatible
+    '''
+
+    #référence pour le calcul de row_size, col_size et destination
     last_id = None
 
-    # l'entrée est un dictionaire de pictogrammes
+    # si l'entrée est un dictionaire de pictogrammes
     if isinstance(input_file, dict):
       # print("Grille créée à partir d'un dictionaire de pictogrammes")
-      # print()
-
+      
       self.__core_voc = dict(input_file)
 
-      # # obtenir row_size et col_size auprès de input_file
-      
-      # for picto in self.__core_voc.values():
-      #   row = int(picto[1])
-      #   column = int(picto[2])
-      #   page = picto[3]
-
-      #   if not first_page:
-      #         first_page = page
-
-      #   # determiner la taille de la grille
-      #   if page == first_page:
-      #     if row > row_ref:
-      #       row_ref = row
-      #     if column > col_ref:
-      #       col_ref = column
-      #   else:
-      #     break
-      
-      # self.__row_size = row_ref + 1
-      # self.__col_size = col_ref + 1
-
-    # l'entrée est un fichier .csv en format Augcom
+    # si l'entrée est un fichier .csv en format Augcom
     elif input_file.endswith('.csv'):
       # print("Grille créée à partir du fichier " + input_file)
-      # print()
-
+    
       # Fichier brut à traiter
       with open(input_file, "r") as rawFile:
 
@@ -456,34 +602,25 @@ class Grid():
             # enregistrer le mot, les coordonnées, la page actuelle et la destination de chaque pictogramme
             self.__core_voc[id] = [word, row, column, page, None]
             
-            # if not first_page:
-            #   first_page = page
-
-            # # determiner la taille de la grille
-            # if page == first_page:
-            #   if row > row_ref:
-            #     row_ref = row
-            #   if column > col_ref:
-            #     col_ref = column
-            
             last_id = id
 
-          # We recover the links between the directories
+          # Nous récupérons les liens entre les répertoires
           elif len(col) > 1:            
             pointed_link = col[1]            			
             self.__core_voc.get(last_id)[4] = pointed_link
-      
-      # self.__row_size = row_ref + 1
-      # self.__col_size = col_ref + 1
 
     else:
-      raise Exception('Incompatible input. Only dict (pictos attributes) or .csv files (augcom format) are accepted')
+      raise Exception('Entrée incompatible. Seul tableaux d attributes (dict) ou fichiers .csv (format AUGCOM) sont acceptés')
 
     self.__add_core_voc()
 
 
   def __add_core_voc(self):
+    '''Mettre en place la structure de la grille à partir de son tableau d'attributes
     
+    Crée des pages et des slots et les affecte en suivant le tableau d'attributes'''
+    
+    #parcourir le tableau d'attributes and extraire l'information
     for picto in self.__core_voc.values():
       word = picto[0]
       row = picto[1]
@@ -491,11 +628,13 @@ class Grid():
       page_name = picto[3]
       dest_name = picto[4]
 
+      # créer la page contenant le picto s'il n'existe pas
       if page_name in self.__pages:
         page = self.__pages.get(page_name)
       else:		  
         page = self.__add_page(page_name)
-          
+
+      # créer la page de destination s'il n'existe pas    
       if dest_name:
         if dest_name in self.__pages:
           destination = self.__pages.get(dest_name)
@@ -504,10 +643,17 @@ class Grid():
       else:
         destination = None
 
+      # créer un slot et l'ajouter dans la bonne page et position
       slot = Slot(word, True, destination)    
       page.set_slot(slot, row, col)
 
+
   def to_graph(self):
+    '''Génére un graphe décrivant la structure de la grille
+
+    :return: un graphe dirigé
+    :rtype: classe: `networkx.DiGraph`
+    '''
 
     nodes = set([])
     edges = set([])
@@ -531,58 +677,55 @@ class Grid():
 
     return G
 
-  def cross_pages(self, page1, page2, parent=None):
-    ''' Croise page1 avec page2 et toutes les sous-pages analogues reliées aux page1 et page2.
-        'parent' identifie une page qui fait un appel récursive.
-        Renvoi 3 choses: 
-        - Un tableau contenant les attributes des pictos dans la page résultante.
-        - La page résultante
-        - Un tableau contenant les pictos non affectés à la page résultante lors du croissement.
 
-        :parent: page de référence pour mettre en place les pictos de retour.
+  def cross_pages(self, page1, page2, parent=None):
+    '''Croise deux pages et toutes les sous-pages analogues reliées entre elles 
+
+    :param page1: première page à croiser
+    :type page1: classe: `Page`
+    :param page2: deuxième page à croiser
+    :type page2: classe: `Page`
+    :param parent: page de référence pour mettre en place les pictogrammes de retour. Cette page fait un appel récursive, defaults to None
+    :type parent: classe: `Page`, optional
+    :return: renvoie 3 choses: Un tableau contenant les attributes des pictos dans la page résultante,
+     la page résultante et un tableau contenant les pictos non affectés à la page résultante lors du croissement
+    :rtype: [type]
     '''
 
-    # nous supposons que les deux pages ont la même taille
-    if page1:
-      row_size = page1.get_row_size()
-      col_size = page1.get_col_size()
-    elif page2:
-      row_size = page2.get_row_size()
-      col_size = page2.get_col_size()
+    # obtenir la taille des pages    
+    row_size = self.get_row_size()
+    col_size = self.get_col_size()
     
+    # sufixe pour rendre unique le nom de chaque page (pas implémenté)
     new_page_name_suffix = random.randint(0,10000)
 
     # tableau de tous les attributs des pictogrammes de la page résultante
     attributes = {}
+
     # tableau des pictogrammes non affectés lors de la fusion
     unallocated_pictos = {}
 
-    # cas 1: Aucune page n'existe
+    # tableau pour stocker les pictos non affectés dans les appels récursives
+    unalloc = {}
+
+    # CAS 1: Aucune page n'existe
+    # ============================
     if (not page1) and (not page2):
       # print('Rien a croiser, fin de la fonction')
       
-      return {}, None, {}
+      return {}, None, unalloc
     
-    # cas 2: seul page1 existe
+    # CAS 2: seul page1 existe
+    # ============================
     if page1 and (not page2):
       result_page = copy.deepcopy(page1)
       picto_dict = result_page.get_pictograms()
 
-      # # chercher et m-à-j le picto de retour.
-      # for picto in picto_dict.values():
-      #   if (picto[0] == 'retour_r') and (picto[1] == row_size - 1) and (picto[2] == col_size - 1):
-      #     if parent:
-      #       picto_dict[f'retour_r@{result_page.get_name()}'][4] = parent.get_name()
-      #       # print('Pictogram de retour mise à jour')
-      # attributes.update(picto_dict)
-      
-      # return attributes, result_page, {}
-
       # m-à-j du picto_dict
       for id, picto1 in picto_dict.items():
             # réviser les duplicatas
-            if id in attributes:
-              id = f'{id}**'
+            while id in attributes:
+              id = f'{id}*'
             
             attributes[id] = picto1
 
@@ -591,7 +734,7 @@ class Grid():
         if (picto[0] == 'retour_r') and (picto[1] == row_size - 1) and (picto[2] == col_size - 1):
           if parent:
             picto_dict[f'retour_r@{result_page.get_name()}'][4] = parent.get_name()
-            # print('Pictogram de retour mise à jour')
+            
         else:
           slot = result_page.get_slot(picto[1], picto[2])
           dest = slot.get_page_destination()
@@ -602,14 +745,15 @@ class Grid():
           # m-à-j de attributes
           for pict_id, picto2 in attribs.items():
             # réviser les duplicatas
-            if pict_id in attributes:
-              pict_id = f'{pict_id}**'
+            while pict_id in attributes:
+              pict_id = f'{pict_id}*'
             
             attributes[pict_id] = picto2  
       
       return attributes, result_page, {}      
     
-    # cas 3: seul page2 existe
+    # CAS 3: seul page2 existe
+    # ============================
     if page2 and (not page1):        
       result_page = copy.deepcopy(page2) 
       picto_dict = result_page.get_pictograms()
@@ -617,8 +761,8 @@ class Grid():
       # m-à-j du picto_dict
       for id, picto1 in picto_dict.items():
             # réviser les duplicatas
-            if id in attributes:
-              id = f'{id}**'
+            while id in attributes:
+              id = f'{id}*'
             
             attributes[id] = picto1
 
@@ -627,7 +771,7 @@ class Grid():
         if (picto[0] == 'retour_r') and (picto[1] == row_size - 1) and (picto[2] == col_size - 1):
           if parent:
             picto_dict[f'retour_r@{result_page.get_name()}'][4] = parent.get_name()
-            # print('Pictogram de retour mise à jour')
+
         else:
           slot = result_page.get_slot(picto[1], picto[2])
           dest = slot.get_page_destination()
@@ -638,14 +782,15 @@ class Grid():
           # m-à-j de attributes
           for pict_id, picto2 in attribs.items():
             # réviser les duplicatas
-            if pict_id in attributes:
-              pict_id = f'{pict_id}**'
+            while pict_id in attributes:
+              pict_id = f'{pict_id}*'
             
             attributes[pict_id] = picto2  
       
       return attributes, result_page, {}
 
-    # cas 4: les deux pages existent
+    # CAS 4: les deux pages existent
+    # ============================
     if page1 and page2:
 
       # décider le nom du page à retenir
@@ -658,7 +803,7 @@ class Grid():
       # - ajouter suffixe au nom de la page pour la differencier des pages de base
       # new_page_name += f'_{new_page_name_suffix}'
       # où
-      # - Enregistrer les noms crées au fur et à mesure dans une liste, puis modifier légerement le nom si déjà dans la liste
+      # - Enregistrer les noms crées au fur et à mesure du croissement dans une liste, puis modifier légerement le nom si déjà dans la liste
       # # ?? 
 
       #page résultante
@@ -671,6 +816,7 @@ class Grid():
           slot_page2 = copy.deepcopy(page2.get_slot(row, col))
           random_selector = random.randint(0,1)
 
+          # les deux pictogrammes existent
           if (slot_page1) and (slot_page2):
             dest_1 = slot_page1.get_page_destination()
             dest_2 = slot_page2.get_page_destination()
@@ -686,8 +832,7 @@ class Grid():
               not_selected_slot = slot_page1
               page_name = page2.get_name()
               page_name_not_selected = page1.get_name()
-
-            
+    
             #déterminer (recursivement) la destination du slot selectionné
             if (selected_slot.get_word() != 'retour_r'):              
               attribs, selected_dest_page, unalloc = self.cross_pages(dest_1, dest_2, result_page)
@@ -701,12 +846,13 @@ class Grid():
               id_not_selected = f'{word_not_selected}@{page_name_not_selected}'
 
               #si deux pictos non affectés ont le même id, modifier légerement l'id de l'un des deux
-              if id_not_selected in unallocated_pictos:
-                # '**' à la fin d'une id indiquera l'existence de 2 pictos differents avec la même mot et même nom de page 
-                id_not_selected = f'{id_not_selected}**'            
+              while id_not_selected in unallocated_pictos or id_not_selected in attributes:
+                # '*' à la fin d'une id indiquera l'existence de 2 pictos differents avec la même mot et même nom de page 
+                id_not_selected = f'{id_not_selected}*'            
                         
               unallocated_pictos[id_not_selected] = word_not_selected
 
+          # seul le premier pictogramme existe
           elif slot_page1:
             selected_slot = slot_page1
             page_name = page1.get_name()
@@ -718,6 +864,7 @@ class Grid():
               if parent:
                 attribs, selected_dest_page, unalloc = {}, parent, {}              
 
+          # seul le deuxième pictogramme existe
           elif slot_page2:
             selected_slot = slot_page2
             page_name = page2.get_name()
@@ -729,91 +876,99 @@ class Grid():
               if parent:
                 attribs, selected_dest_page, unalloc = {}, parent, {}
             
-          # aucun des pictos n'existe
+          # aucun des pictos n'existe pas
           else: 
             selected_slot = None            
 
-          #m-à-j des attributes des pictogrammes de la page résultante
+          # --------------------------------------------------------------------------------------
+          #m-à-j des attributes du pictogramme selectionné dans la page résultante
           if selected_slot:
             word = selected_slot.get_word()
             selected_slot = Slot(word, False, selected_dest_page)
             result_page.set_slot(selected_slot, row, col)
 
-            #ajouter les pictos des pages de destination
+            #ajouter les pictos des pages de destination au tableau d'attributes
             attributes.update(attribs)
 
             #m-à-j le dict de pictos non affectés avec ceux des appels récursives
             unallocated_pictos.update(unalloc)
 
-            id = f'{word}@{page_name}'
-
             if selected_dest_page:                
                 dest_page_name = selected_dest_page.get_name()
             else:
               dest_page_name = None
+
+            # id du picto selectionné
+            id_selected = f'{word}@{page_name}'
+
             #si deux pictos ont le même id, modifier légerement l'id de l'un d'eux
-            if id in attributes:
-              id = f'{word}@{page_name}**'
+            while id_selected in attributes or id_selected in unallocated_pictos:
+              id_selected = f'{id_selected}*'
             
-            attributes[id] = [word, row, col, new_page_name, dest_page_name]
+            attributes[id_selected] = [word, row, col, new_page_name, dest_page_name]
 
           # mettre en place le picto selectionné dans la page résultante 
           result_page.set_slot(selected_slot, row, col)     
     
-    # print()
-    # if page1 and page2:
-    #   print(f'CROSSED: {page1.get_name()} <-> {page2.get_name()}')
-    # elif page1:
-    #   print(f'CROSSED: {page1.get_name()} <-> Nothing')
-    # else:
-    #   print(f'CROSSED: Nothing <-> {page2.get_name()}')
-
-    # print()
-    # for k,p in attributes.items():
-    #   print(f'{k}:{p}')
-    # print()
-
     return attributes, result_page, unallocated_pictos
-  
-  def fusion_with(self, grid):
-    '''Fusione les pages analogues de deux grilles aléatoirement et renvoi la grille résultante. Elle contient
-      les pictogrammes des deux grilles'''
 
+
+  def fusion_with(self, grid):
+    '''Fusione aléatoirement les strutures analogues (pages) de deux grilles
+
+    Fonction récursive. En partant des deux accueils, on compare chaque slot d'une page avec son analogue 
+    dans l'autre page et choisit aléatoirement l'un d'entre eux.
+    Par exemple, les slots situés à la position (2,3) dans les pages d'accueil de la première et la deuxième 
+    grille sont utilisés pour définir le slot situé à (2,3) dans la page d'accueil de la grille résultante.
+    Ainsi, pour chaque position il y a toujours un slot selectionné (ce qui va dans les pages de base de la 
+    grille résultante) et un autre non-selectionné qui va dans des pages spécialement concues à ce propos (extra_pages).
+
+    La grille résultante est une structure unique et indépéndante. Elle contient les pictogrammes des deux grilles
+    originales.
+
+    :param grid: la deuxième grille avec laquelle la grille actuelle va se fusioner
+    :type grid: classe: `Grid`
+    :return: une nouvelle grille avec une nouvelle structure 
+    :rtype: classe: `Grid`
+    '''
+
+    # tableau d'attributes de la grille résultante contenant uniquement les pictos selectionnés
+    attributes_dict = {}
+
+    # tableau contentant tous les pictogrammes non selectionnés lors de la fusion
+    unalloc_dict = {}
+
+    # extraire la taille des grilles
+    row_size = self.get_row_size()
+    col_size = self.get_col_size()
+
+    # extraire les pages d'accueil de chacune des grilles
     current_accueil = self.get_root_page() 
     foreing_accueil = grid.get_root_page()  
 
+    # Fusioner les deux grilles à travers leurs pages d'accueil.   
     attributes_dict, result_page, unalloc_dict = self.cross_pages(current_accueil, foreing_accueil)    
 
-    # print('UNALLOCATED :\n')
-    # print(unalloc_dict)
-  
-    row_size = self.get_row_size()
-    col_size = self.get_col_size()
+    # Créer la structure de base de la grille résultante
     new_grid = Grid(attributes_dict, row_size, col_size)
 
-    # print('--------------------------------------------')
-    # print(f'NEW_GRID AVANT REMPLISSAGE ET CRÉATION DES PAGES EXTRA')
-    # print()
-    # new_grid.display('before')
-    # for k,p in new_grid.get_core_voc().items():
-    #   print(f'{k}:{p}')
-    # print('------------------------------------------')
-    
-
-    # remplir slots vides avec les pictos non affectées
+    # remplir slots vides (pas de slot) avec les pictos non affectées
     for page in new_grid.get_page_dict().values():
       for row in range(1, row_size):
         for col in range(1, col_size):
           slot = page.get_slot(row, col)
-          if not slot:
-            # print(f'{slot}')
+          if not slot:            
             try:
               # renvoyer l'id du pictgramme non affecté suivant
               id_next_unalloc_picto = next(iter(unalloc_dict))
 
-              #vérifier si l'id du picto non alloué existe déjà dans le tableau d'attributes de la grille 
+              #vérifier si l'id du picto non alloué existe déjà dans le tableau d'attributes de la grille (re-check)
               if id_next_unalloc_picto in new_grid.get_core_voc():
-                new_id = f'{id_next_unalloc_picto}**'
+                new_id = f'{id_next_unalloc_picto}*'
+                # ajouter des '*' jusqu'à ce que l'id soit unique
+                while new_id in new_grid.get_core_voc():
+                  new_id = f'{new_id}*'
+
                 unalloc_dict[new_id] = unalloc_dict.pop(id_next_unalloc_picto)
                 id_next_unalloc_picto = new_id
 
@@ -821,8 +976,6 @@ class Grid():
               word = unalloc_picto
               slot = Slot(word, False, None)
               page.set_slot(slot, row, col)
-              
-              # print(f'slot vide affecté: page:{page.get_name()}, row: {row}, col: {col}, word: {word}')
 
               #m-à-j du dict d'attriburtes de la nouvelle grille
               new_grid.get_core_voc()[id_next_unalloc_picto] = [word, row, col, page.get_name(), None]     
@@ -859,9 +1012,13 @@ class Grid():
                 id_next_unalloc_picto = next(iter(unalloc_dict))
 
                 #vérifier si l'id du picto non alloué existe dans le dict d'attributes de la grille
-                # sinon, ajouter '**' à la fin de l'id répété pour en créér une autre 
+                # sinon, ajouter '*' à la fin de l'id répété pour en créér un id unique  
                 if id_next_unalloc_picto in new_grid.get_core_voc():
-                  new_id = f'{id_next_unalloc_picto}**'
+                  new_id = f'{id_next_unalloc_picto}*'
+
+                  while new_id in new_grid.get_core_voc():
+                    new_id = f'{new_id}*'
+
                   unalloc_dict[new_id] = unalloc_dict.pop(id_next_unalloc_picto)
                   id_next_unalloc_picto = new_id
 
@@ -878,14 +1035,20 @@ class Grid():
                 
     return new_grid
 
+
+  # TO-DO: ne fonctionne pas, à déboger 
   def shuffle(self):
-    '''Mélange les pictogrammes à l'intérieure de chaque page de la grille'''
+    '''Mélange les pictogrammes à l'intérieure de chaque page de la grille
 
+    Change uniquement la distribution spaciale des pictogrammes d'une page. 
+
+    :raises Exception: [description]
+    :return: [description]
+    :rtype: [type]
+    '''
+
+    # copier le tableau d'attributes de la grille originale
     core_voc_copy = copy.deepcopy(self.get_core_voc())
-
-    print()
-    print(f'VOC_AVANT : {core_voc_copy}')
-    print()
 
     # new_grid_core_voc = new_grid.get_core_voc()
     row_size = self.get_row_size()
@@ -898,12 +1061,14 @@ class Grid():
     all_coords.pop()
 
     for page_name in self.get_page_dict():
-      coords_list = list(all_coords)      
+      # liste de toutes les coordonnées sauf (row_size-1, col_size-1)
+      coords_list = list(all_coords) 
+      # 
+      info = []
+
       #mélange la liste
       random.shuffle(coords_list)
-      info = []
-      c=0
-
+      
       for id, picto in self.get_core_voc().items():
         
         # choisir pictos dans la même page. Ne tenir pas compte des pictos en ligne/col = 0. 
@@ -913,28 +1078,24 @@ class Grid():
             
             try:          
               row, col = coords_list.pop()
-            except:
-              print('INFO_VOC:')
-              for i in info:
-                print(i)
-              print()
-              print('SELF_VOC:')
-              for k,i in self.get_core_voc().items():
-                print(k, i)
-              
-              self.display('shuffle_1')
-              raise Exception('PROBLEM')
-            # slot = Slot(picto[0], False, self.get_page(picto[4]))
-            # new_grid.get_page(page_name).set_slot(slot, row, col)
-
+            except:              
+              raise Exception('Problème dans fonction shuffle(). Valider tableau d attributes')
+            
             #affecter les nouvelles coordonnées aux pictos de la pag courante
             core_voc_copy[id][1] = row
             core_voc_copy[id][2] = col
     
     return Grid(core_voc_copy, row_size, col_size)
 
+
   def to_text(self, output_name='grid_text.csv'):
-    '''Crée un fichier texte (.csv) décrivant la grille en format augcom'''
+    '''Crée un fichier texte (.csv) décrivant la grille en format AUGCOM.
+
+    Voir le repo du projet pour plus d'information sur le format Augcom.
+
+    :param output_name: le nom du fichier résultant, defaults to 'grid_text.csv'
+    :type output_name: chaîne de charactères, optional
+    '''
 
     print("output file is " + output_name)
     print()
@@ -953,8 +1114,13 @@ class Grid():
         if attributes[4]:
           print(f'\t\t\t{picto_id}\t{attributes[4]}', file=text_file)
 
-  # Méthode d'affichage 1
+
   def __str__(self):
+    '''Méthode d'affichage 1
+
+    :return: renvoie une représentation lisible de la structure de la grille
+    :rtype: chaîne de charactères
+    '''
 
     s = 'grid : {\n'
     for page in self.__pages.values():
@@ -962,9 +1128,18 @@ class Grid():
     s += '}\n'
     return s
 
-  # Méthode d'affichage 2
+     
   def display(self, name='default'):
-    ''' Génére un image detaillé de l'estructure de la grille. Il utilise Graphviz et le language DOT'''
+    '''Méthode d'affichage 2
+
+    Génére une image detaillé et intuitive de la structure de la grille. Il utilise Graphviz et le language DOT.
+    Il export automatiquement l'image en format png au répértoire actuel 
+
+    :param name: le nom du fichier image produit, defaults to 'default'
+    :type name: chaîne de charactères, optional
+    :return: renvoie un graphe dirigé
+    :rtype: classe: `networkx.DiGraph`
+    '''
 
     graph = Digraph(comment='Test', node_attr={'shape': 'record'}) #, 'fixedsize': 'true', 'width':'4', 'height':'2'})
     row_size = self.get_row_size()
@@ -985,6 +1160,7 @@ class Grid():
           if slot:
             word = slot.get_word()
             dest = slot.get_page_destination()
+
             #ajouter lien entre picto directoire et la page correspondante 
             if dest:              
               graph.edge(f'{page_name}:{slot_index}', f'{dest.get_name()}')
@@ -1002,13 +1178,13 @@ class Grid():
 
       #créer noeud 
       graph.node(f'{page_name}', f'{attribute_string}')
-      #print(graph.source)
-      graph.render(filename=name,format='png')
 
-      
+    # rendre l'image et l'export au format png  
+    graph.render(filename=name,format='png')
+
     return graph
 
-#****************************************************************************************************************
+#=========================================================================================================================
 
 def compute_distances(grid, movement_factor=1, selection_factor=1):
   '''
@@ -1222,7 +1398,8 @@ def shortestPath(initialNode, sentance, nodeList, edgeList, G):
                 except nx.NetworkXNoPath:
                     
                     print ("No path between %s and %s." % (firstNode, candidate))
-
+                    global PB
+                    PB = 1
                     # return -1
 
                     # plt.clf()
@@ -1353,20 +1530,24 @@ from deap import base
 from deap import creator
 from deap import tools
 
+import threading
+
 # CX_PROB  est la probabilité avec laquelle deux individus se croisent
 # MUT_PROB est la probabilité de mutation d'un individu
-CX_PROB, MUT_PROB = 0.9, 0.9    ## todo: choisir les probs
+CX_PROB, MUT_PROB = 0.5, 0.5    ## todo: choisir les probs
 
 # SCORE_THRESHOLD est le coût ciblé.
 # MAX_ITER est le nombre maximale d'itérations
-SCORE_THRESHOLD, MAX_ITER = 7.0, 5
+SCORE_THRESHOLD, MAX_ITER = 7.0, 10
 
 # Dimensions des grilles
 ROW_SIZE = 4
 COL_SIZE = 4
 
+# NB_SELECTED_IND est le nombre d'individus qu'on va séléctioner dans chaque génération
+NB_SELECTED_IND = 5
+
 # phrase d'entrée
-# sentence = 'je voyager train'
 sentence = 'je voyager train'
 
 def init_grid(container, source_file):
@@ -1394,39 +1575,12 @@ def evalProdCost(sentence, individual):
   # cost = result[0][1]
   
   individual.best_path = cost[0][0]
-  
-  # if len(cost) == 1:
-  #   if cost[0] == -1:
-  #     print([(k,p) for k,p in individual.get_core_voc().items()])
-  #     return individual.display('bug')
           
   return cost[0][1],    ##todo: plusieurs sentences
 
 # Fonction de fusion externe(fusion)
-def external_fusion(individual1, individual2):
-  # print('INDIVIDUAL 1 ************************')
-  # print(individual1)
-  # for k,p in individual1.get_core_voc().items():
-  #   print(f'{k}:{p}')
-  # print()
-  # individual1.display('ind_1')
-  # print('INDIVIDUAL 2 ************************')
-  # print(individual2)
-  # for k,p in individual2.get_core_voc().items():
-  #   print(f'{k}:{p}')
-  # print()
-  # individual2.display('ind_2')
-  # print('NEW GRID ****************************')
-  new_grid = individual1.fusion_with(individual2)
-  # print()
-  # print(new_grid)
-  # for k,p in new_grid.get_core_voc().items():
-  #   print(f'{k}:{p}')
-  # print()
-  # new_grid.display('new_ind')
-
-  
-  # input("Press Enter to continue...")
+def external_fusion(individual1, individual2):  
+  new_grid = individual1.fusion_with(individual2)  
 
   return toolbox.individual(new_grid.get_core_voc())
 
@@ -1447,6 +1601,7 @@ toolbox.register("select", tools.selBest)
 #PIPEPLINE
 
 def main(files):
+
   #Création de la population
   pop = toolbox.population(files)
 
@@ -1468,6 +1623,11 @@ def main(files):
 
   # Commencez l'évolution ***
 
+  abs_path = '/home/fran/mosig/internship/grid_gen/'
+  global PB
+  PB = 0
+
+
   # évoluer jusqu'à ce qu'un individu atteigne SCORE_THRESHOLD ou que le nombre de générations atteigne MAX_ITER
   while max(fits) > SCORE_THRESHOLD and g < MAX_ITER:
     # A new generation
@@ -1475,7 +1635,7 @@ def main(files):
     print("-- Generation %i --" % g)
 
     # Sélectionnez les individus de la génération suivante
-    offspring = toolbox.select(pop, len(pop))
+    offspring = toolbox.select(pop, NB_SELECTED_IND)
 
     # Cloner les individus sélectionnés
     #offspring = list(map(toolbox.clone, offspring))
@@ -1488,7 +1648,50 @@ def main(files):
       if random.random() < CX_PROB:
         n_ind = toolbox.mate(child1, child2)
 
-        check_voc(n_ind.get_core_voc(), n_ind)
+
+
+        toolbox.evaluate(n_ind)  
+        if PB:
+          with open(f'{abs_path}pb/child_1.csv', 'w') as f1:
+            for k,i in child1.get_core_voc().items():
+              print(k, i, file=f1)
+          
+          with open(f'{abs_path}pb/child_2.csv', 'w') as f2:
+            for k,i in child2.get_core_voc().items():
+              print(k, i, file=f2)
+
+          with open(f'{abs_path}pb/new_child.csv', 'w') as f3:
+            for k,i in n_ind.get_core_voc().items():
+              print(k, i, file=f3)
+
+          child1.display('pb/child_1')
+          child2.display('pb/child_2')
+          n_ind.display('pb/new_child')
+
+          exit(0)
+
+        # check_voc(n_ind.get_core_voc(), n_ind)
+
+
+        # if check_voc(n_ind.get_core_voc(), n_ind):
+        #   with open(f'{abs_path}pb/child_1.csv', 'w') as f1:
+        #     for k,i in child1.get_core_voc().items():
+        #       print(k, i, file=f1)
+          
+        #   with open(f'{abs_path}pb/child_2.csv', 'w') as f2:
+        #     for k,i in child2.get_core_voc().items():
+        #       print(k, i, file=f2)
+
+        #   with open(f'{abs_path}pb/new_child.csv', 'w') as f3:
+        #     for k,i in n_ind.get_core_voc().items():
+        #       print(k, i, file=f3)
+
+        #   child1.display('pb/child_1')
+        #   child2.display('pb/child_2')
+        #   n_ind.display('pb/new_child')
+
+        #   exit(0)
+        
         
         new_cx_individuals.append(n_ind)
 
@@ -1498,6 +1701,7 @@ def main(files):
     # m-à-j offspring    
     offspring.extend(new_cx_individuals)
 
+    # *****************************************************************************
     # MUTATION (REORGANISATION INTERNE)
     # new_mut_individuals = []
     # for mutant in offspring:
@@ -1509,6 +1713,7 @@ def main(files):
 
     # m-à-j offspring 
     # offspring.extend(new_mut_individuals)
+    # *****************************************************************************
 
     # Evaluer les individus sans fitness calculée (fitness invalide) ***
     invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
@@ -1538,14 +1743,13 @@ def main(files):
   indiv_min = pop[index_min]
   indiv_max = pop[index_max]  
 
-  abs_path = '/home/fran/mosig/internship/grid_gen/data/'
   c = 0
   print()
   for ind in pop:
     print(f'Path_{c}: {ind.best_path}')
     ind.display(f'img/ind_{c}')
 
-    with open(f'{abs_path}ind_{c}.csv', 'w') as f:
+    with open(f'{abs_path}data/ind_{c}.csv', 'w') as f:
       # print(f'Path_{c}: {ind.best_path}', file=f)
       # print(file=f)
       for k,i in ind.get_core_voc().items():
@@ -1580,7 +1784,9 @@ def check_voc(dict_att,grid):
   if sum(df2.values) != len(df2.values):
     print(pd.DataFrame.from_dict(grid.get_core_voc(), orient='index').sort_values([3]))
     raise Exception('COORDONÉES REPÉTÉES')
-  print('OK...!')
+    # return 1
+  print('check_voc OK...!')
+  # return 0
 
 
 ## TEST PIPELINE
@@ -1593,7 +1799,8 @@ files = [f'{path1}grid_1_3p_raw.csv', f'{path1}grid_2_3p_raw.csv', f'{path1}grid
 # files = [f'{path1}g1_letters.csv', f'{path1}g2_letters.csv']
 # files = [f'{path1}grid_1_3p_raw.csv', f'{path2}Corrected_proloquo_FR_brut.csv']
 
-main(files)
+if __name__ == '__main__':
+  main(files)
 
 
 
