@@ -9,15 +9,14 @@
 # coding=utf-8
 
 
-import networkx as nx
-import matplotlib.pyplot as plt
 # %matplotlib
 plt.rcParams['figure.figsize'] = [12, 12]
+import matplotlib.pyplot as plt
 import random
 import copy
-#from ipywidgets import GridspecLayout, Button, Layout
 import math
 import numpy as np
+import pandas as pd
 import sys
 from graphviz import Digraph
 import pylab
@@ -27,7 +26,11 @@ import networkx as nx
 from networkx import *
 import os
 import pickle
-import pandas as pd
+
+# ALGORITHME GÉNÉTIQUE
+from deap import base
+from deap import creator
+from deap import tools
 
 
 class Slot():
@@ -648,36 +651,6 @@ class Grid():
       page.set_slot(slot, row, col)
 
 
-  def to_graph(self):
-    '''Génére un graphe décrivant la structure de la grille
-
-    :return: un graphe dirigé
-    :rtype: classe: `networkx.DiGraph`
-    '''
-
-    nodes = set([])
-    edges = set([])
-    for key,page in self.__pages.items():
-      nodes.add(key)
-      slots = page.get_slot_list()
-      for items in slots:
-        for slot in items:
-          if slot != None:
-            dest = slot.get_page_destination()
-            if dest != None:
-              dest = dest.get_name()
-              edges.add((key, dest))
-    
-    G=nx.DiGraph()
-    G.add_nodes_from(nodes)
-    G.add_edges_from(edges)
-    nx.draw(G,with_labels=True)
-    # plt.savefig("grid_graph.png") # save as png
-    plt.show() # display
-
-    return G
-
-
   def cross_pages(self, page1, page2, parent=None):
     '''Croise deux pages et toutes les sous-pages analogues reliées entre elles 
 
@@ -1088,6 +1061,36 @@ class Grid():
     return Grid(core_voc_copy, row_size, col_size)
 
 
+  def to_graph(self):
+    '''Génére un graphe décrivant la structure de la grille
+
+    :return: un graphe dirigé
+    :rtype: classe: `networkx.DiGraph`
+    '''
+
+    nodes = set([])
+    edges = set([])
+    for key,page in self.__pages.items():
+      nodes.add(key)
+      slots = page.get_slot_list()
+      for items in slots:
+        for slot in items:
+          if slot != None:
+            dest = slot.get_page_destination()
+            if dest != None:
+              dest = dest.get_name()
+              edges.add((key, dest))
+    
+    G=nx.DiGraph()
+    G.add_nodes_from(nodes)
+    G.add_edges_from(edges)
+    nx.draw(G,with_labels=True)
+    # plt.savefig("grid_graph.png") # save as png
+    plt.show() # display
+
+    return G
+
+
   def to_text(self, output_name='grid_text.csv'):
     '''Crée un fichier texte (.csv) décrivant la grille en format AUGCOM.
 
@@ -1187,9 +1190,18 @@ class Grid():
 #=========================================================================================================================
 
 def compute_distances(grid, movement_factor=1, selection_factor=1):
-  '''
-  Calcule la distance entre chaque paire de pictogrammes à l'intérieure de chaque page d'une grille
+  '''Calcule la distance entre chaque paire de pictogrammes à l'intérieure de chaque page d'une grille
+
   Prend en compte la difficulté du mouvement (movement_factor) et la difficulté de la sélection (selection_factor)
+
+  :param grid: grille à traiter
+  :type grid: classe: `Grid`
+  :param movement_factor: facteur de difficulté du mouvement, defaults to 1
+  :type movement_factor: entier, optional
+  :param selection_factor: facteur de difficulté de la sélection, defaults to 1
+  :type selection_factor: entier, optional
+  :return: déscription textuelle des distances entre chaque pictogramme 
+  :rtype: chaîne de charactères
   '''
 
   # Dictionaire des distances
@@ -1259,34 +1271,38 @@ def compute_distances(grid, movement_factor=1, selection_factor=1):
     else :
       distances += "Page à Mot" + "\t" + currentPage + "\t" + refID + "\t" + str(pageToPicto * m + n) + "\n"
 
-  # with open('dist_file.csv', "w") as dist:
-  #   for line in distances.splitlines():
-  #     dist.write(f'{line}\n')
-
   return distances
 
-#****************************************************************************************************************
+#=========================================================================================================================
 
-## Cost
 # FONCTIONS AUXILIAIRES POUR LE CALCUL DU COÛT DE PRODUCTION
 #--------------------------------------------------------------
 
 class WeightedPath:
+    '''Classe auxiliaire pour stocker le chemin et le coût lors du calcul du chemin optimale'''
 
     def __init__(self):
+        '''Constructeur'''
+
         self.path = []
         self.weight = 0
 
 
-# Fonction qui établit le noeud à partir duquel il faut commencer à calculer un arc
-'''
-text = texte d'entrée
-nodeList = liste de tous les noeuds du graphe
-edgeList = tableau associatif de tous les arcs avec en clé le noeud tête et en valeurs le noeud pointé et le poids de l'arc
-G = graphe initial (DiGraph)
-'''
-
 def initialNode(text, nodeList, edgeList, G):
+    '''Fonction qui établit le noeud à partir duquel il faut commencer à calculer un arc
+
+    :param text: texte d'entrée
+    :type text: chaîne de charactères
+    :param nodeList: liste de tous les noeuds du graphe
+    :type nodeList: liste
+    :param edgeList: tableau associatif de tous les arcs avec en clé le noeud tête et en valeurs le noeud pointé et le poids de l'arc
+    :type edgeList: Dict
+    :param G: graphe initial 
+    :type G: classe: `networkx.DiGraph`
+    :return: liste avec le chemin et le poids total
+    :rtype: liste
+    '''
+
     path = []
     stock = []
     totalWeight = 0
@@ -1300,10 +1316,6 @@ def initialNode(text, nodeList, edgeList, G):
         if line != "":
             # On récupère le plus court chemin
             words = shortestPath(startNode, line, nodeList, edgeList, G)
-
-            # if words == -1:
-            #   return list([-1])
-
             path = words.path
             # On récupère le dernier élément de la liste
             startNode = path[-1]
@@ -1320,19 +1332,21 @@ def initialNode(text, nodeList, edgeList, G):
                 # on ajoute l'elt au chemin final
                 finalPath.append(path[i])
         # On stocke dans une liste le chemin et le poids total
-        # stock.append(str(finalPath) + " " + str(totalWeight))
         stock.append((finalPath, totalWeight))
 
     return stock
 
 
-# Fonction qui prend en entrée un mot de la phrase et en fait une liste de noeuds possibles
-'''
-nodeList = liste de tous les noeuds du graphe
-word = chaque word de la phrase d'entrée 
-'''
-
 def textToNodes(word, nodeList):
+    '''Fonction qui prend en entrée un mot de la phrase et en fait une liste de noeuds possibles
+
+    :param word: chaque word de la phrase d'entrée
+    :type word: chaîne de charactères
+    :param nodeList: liste de tous les noeuds du graphe
+    :type nodeList: liste
+    :return: liste des noeuds canidats potentiels
+    :rtype: liste
+    '''
     candidatesNode = []
     # on parcours la liste des noeuds
     for i in range(0, len(nodeList)):
@@ -1342,21 +1356,31 @@ def textToNodes(word, nodeList):
         if wordNode[0] == word:
             # on l'ajoute à la liste des noeuds canidats potentiels
             candidatesNode.append(nodeList[i])
+
     return candidatesNode
 
 
-# Fonction de calcul du plus court path
-'''
-initialNode = point de départ de la recherche dans le graphe
-sentance = phrase d'entrée pour laquelle il faut calculer le cout de production
-nodeList = liste de tous les noeuds du graphe
-edgeList = tableau associatif de tous les arcs avec en clé le noeud tête et en valeurs le noeud pointé et le weight de l'arc
-'''
-
 def shortestPath(initialNode, sentance, nodeList, edgeList, G):
+    '''Fonction de calcul du plus court path
+
+    :param initialNode: point de départ de la recherche dans le graphe
+    :type initialNode: Node
+    :param sentance: phrase d'entrée pour laquelle il faut calculer le cout de production
+    :type sentance: chaîne de charactères
+    :param nodeList: liste de tous les noeuds du graphe
+    :type nodeList: liste
+    :param edgeList: tableau associatif de tous les arcs avec en clé le noeud tête et en valeurs le noeud pointé et le weight de l'arc
+    :type edgeList: Dict
+    :param G: graphe en question
+    :type G: classe: networkx.DiGraph
+    :return: objet contenant le chemin final et le coût final
+    :rtype: classe: `WeightedPath`
+    '''
+
     initialNodes = []
     words = sentance.split(" ")
     shortestPath = []
+
     # Initialisation du poids total
     totalWeight = 0
     initialNodes.append(initialNode)
@@ -1367,7 +1391,6 @@ def shortestPath(initialNode, sentance, nodeList, edgeList, G):
 
     # On créé un nouveau graphe avec la liste des candidats
     coupleGraphe = nx.DiGraph()
-    # coupleGraphe.add_node("end")
 
     index = 0
     # On parcours la phrase
@@ -1395,21 +1418,12 @@ def shortestPath(initialNode, sentance, nodeList, edgeList, G):
                 try:
                     # graph = Digraph(filename='GGGG',format='png',comment='TEST_1')
                     path = nx.shortest_path(G, source=firstNode, target=candidate)
-                except nx.NetworkXNoPath:
-                    
+                except nx.NetworkXNoPath:                    
                     print ("No path between %s and %s." % (firstNode, candidate))
-                    global PB
-                    PB = 1
-                    # return -1
-
-                    # plt.clf()
-                    # pos = nx.spring_layout(G, k=0.85, iterations=20)                    
-                    # nx.draw(G, pos, edge_color='magenta', width = 0.5, node_size=60, with_labels=True)
-                    # time.sleep(60)
-
-
+                
                 # On initialise le poids
                 weight = 0
+
                 # On parcours le chemin
                 for i in range(1, len(path)):
                     edgePrevNode = edgeList[path[i - 1]]
@@ -1433,8 +1447,6 @@ def shortestPath(initialNode, sentance, nodeList, edgeList, G):
 
         # On calcule la somme des poids entre les arcs
         totalWeight += minWeight
-
-        # print(f'MinWeight = {minWeight}')  
     
     # On applique à nouveau une recherche du plus court chemin dans le sous graphe
     try:        
@@ -1444,8 +1456,9 @@ def shortestPath(initialNode, sentance, nodeList, edgeList, G):
         print ("No path between %s and %s. Please check the input phrase" % ("accueil", "end"))
         sys.exit()
         
-    # On céé le chemin final
+    # On créé le chemin final
     wordIndex = 0
+
     # On parcours la liste des chemins
     for path in pathList:
         if (shortestpath[wordIndex] == path[0]) and (shortestpath[wordIndex + 1] == path[-1]):
@@ -1460,28 +1473,42 @@ def shortestPath(initialNode, sentance, nodeList, edgeList, G):
 
     return weightedPath
 
-# Fonction qui stocke un objet dans un fichier .pkl
-'''
-obj = lobjet à stocker
-name = nom du fichier créé
-'''
 
 def save_obj(obj, name ):
+    '''Fonction qui stocke un objet dans un fichier .pkl
+
+    :param obj: l'objet à stocker
+    :type obj: any
+    :param name: nom du fichier créé
+    :type name: chaîne de charactères
+    '''
     with open(name + '.pkl', 'wb') as f:
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
-# Fonction qui récupere un objet contenu dans un fichier .pkl
-'''
-name = nom du fichier cible
-'''
 
-def load_obj(name ):
+def load_obj(name):
+    '''Fonction qui récupere un objet contenu dans un fichier .pkl
+
+    :param name: nom du fichier cible
+    :type name: chaîne de charactères
+    :return: renvoie le fichier avec nom `name`
+    :rtype: any
+    '''
     with open(name + '.pkl', 'rb') as f:
+
         return pickle.load(f)
 
-#****************************************************************************************************************
 
 def compute_cost(input_sentence, distances):
+  '''Calcule le coût associé à la phrase d'entrée utilisant les distances données en entrée 
+
+  :param input_sentence: phrase d'entrée
+  :type input_sentence: chaîne de charactères
+  :param distances: contient les distances entre chaque pictogramme 
+  :type distances: chaîne de charactères
+  :return: le meilleur chemin et le coût final
+  :rtype: liste
+  '''
   # start_time = time.time()
 
   # variable qui garde le meilleur chemin et le coût final
@@ -1523,18 +1550,14 @@ def compute_cost(input_sentence, distances):
 
   return result
 
-#****************************************************************************************************************
+#=========================================================================================================================
 
 # ALGORITHME GÉNÉTIQUE
-from deap import base
-from deap import creator
-from deap import tools
-
-import threading
+# Ici on utilise le framework de la librairie < Algorithmes évolutionnaires distribués en Python (DEAP) >
 
 # CX_PROB  est la probabilité avec laquelle deux individus se croisent
 # MUT_PROB est la probabilité de mutation d'un individu
-CX_PROB, MUT_PROB = 0.5, 0.5    ## todo: choisir les probs
+CX_PROB, MUT_PROB = 0.5, 0.5    
 
 # SCORE_THRESHOLD est le coût ciblé.
 # MAX_ITER est le nombre maximale d'itérations
@@ -1550,13 +1573,36 @@ NB_SELECTED_IND = 5
 # phrase d'entrée
 sentence = 'je voyager train'
 
+
 def init_grid(container, source_file):
+  '''Initialise la grille dans le cadre de DEAP
+
+  :param container: structure qui encapsule les données dentrée
+  :type container: un conteneur
+  :param source_file: fichier/tableau source
+  :type source_file: fichier texte ou tableau d'attributes
+  :return: un conteneur avec les parametres d'entrée
+  :rtype: conteneur
+  '''
   
   return container(source_file, ROW_SIZE, ROW_SIZE)
 
+
 def init_population(container, func, source_file_list):
-  
+  '''Initialise une population dans le cadre de DEAP
+
+  :param container: structure qui encapsule les données dentrée
+  :type container: un conteneur
+  :param func: une fonction qui va être utilisé sur le fichier source
+  :type func: fonction
+  :param source_file_list: liste de noms de fichiers source
+  :type source_file_list: liste
+  :return: un conteneur avec quelques parametres d'entrée
+  :rtype: conteneur
+  '''
+
   return container(func(file) for file in source_file_list)
+
 
 #Créer le container pour la fonction de coût et les individus
 creator.create("FitnessMax", base.Fitness, weights=(1.0,))      ##todo: arrange weights quand plusieurs fitnesses (sentences) 
@@ -1567,8 +1613,17 @@ toolbox = base.Toolbox()
 toolbox.register("individual", init_grid, creator.Individual)
 toolbox.register("population", init_population, list, toolbox.individual)
 
-# Fonction d'évaluation du coût de production
+
 def evalProdCost(sentence, individual):
+  '''Fonction d'évaluation du coût de production dans le cadre de DEAP
+
+  :param sentence: phrase d'entrée
+  :type sentence: chaîne de charactères
+  :param individual: représentation d'une grille dans le cadre de DEAP
+  :type individual: classe: `toolbox.individual`
+  :return: renvoie le coût associé à `sentance` sur la grille `individual`  
+  :rtype: [type]
+  '''
   distances = compute_distances(individual)
   cost = compute_cost(sentence, distances)
   # path = result[0][0]
@@ -1578,17 +1633,35 @@ def evalProdCost(sentence, individual):
           
   return cost[0][1],    ##todo: plusieurs sentences
 
-# Fonction de fusion externe(fusion)
-def external_fusion(individual1, individual2):  
+
+def external_fusion(individual1, individual2): 
+  '''Fonction de fusion externe (DEAP)
+
+  :param individual1: première grille 
+  :type individual1: classe: `toolbox.individual`
+  :param individual2: deuxième grille
+  :type individual2: classe: `toolbox.individual`
+  :return: la grille résultante
+  :rtype: classe: `toolbox.individual`
+  '''
   new_grid = individual1.fusion_with(individual2)  
 
   return toolbox.individual(new_grid.get_core_voc())
 
-# Fonction de fusion interne (shuffle)
+
 def internal_fusion(individual):
+  '''Fonction de fusion interne (DEAP)
+
+  :param individual: la grille concernée
+  :type individual: classe: `toolbox.individual`
+  :return: renvoie la grille résultante
+  :rtype: classe: `toolbox.individual`
+  '''
+
   new_grid = individual.shuffle()
 
   return toolbox.individual(new_grid.get_core_voc())
+
 
 # Operateurs génétiques
 toolbox.register("evaluate", evalProdCost, sentence)
@@ -1597,10 +1670,15 @@ toolbox.register("mutate", internal_fusion)
 toolbox.register("select", tools.selBest)
 
 
-#****************************************************************************************************************
+#=========================================================================================================================
 #PIPEPLINE
 
 def main(files):
+  '''Fonction principale qui implémente la boucle itérative de l'algorithme génétique
+
+  :param files: liste de noms de fichiers source
+  :type files: liste
+  '''
 
   #Création de la population
   pop = toolbox.population(files)
@@ -1622,12 +1700,7 @@ def main(files):
   g = 0
 
   # Commencez l'évolution ***
-
-  abs_path = '/home/fran/mosig/internship/grid_gen/'
-  global PB
-  PB = 0
-
-
+  
   # évoluer jusqu'à ce qu'un individu atteigne SCORE_THRESHOLD ou que le nombre de générations atteigne MAX_ITER
   while max(fits) > SCORE_THRESHOLD and g < MAX_ITER:
     # A new generation
@@ -1637,9 +1710,6 @@ def main(files):
     # Sélectionnez les individus de la génération suivante
     offspring = toolbox.select(pop, NB_SELECTED_IND)
 
-    # Cloner les individus sélectionnés
-    #offspring = list(map(toolbox.clone, offspring))
-
     # Appliquer le crossover et la mutation sur la progéniture ***
 
     # CROSSOVER (FUSION)
@@ -1647,56 +1717,9 @@ def main(files):
     for child1, child2 in zip(offspring[::2], offspring[1::2]):
       if random.random() < CX_PROB:
         n_ind = toolbox.mate(child1, child2)
-
-
-
-        toolbox.evaluate(n_ind)  
-        if PB:
-          with open(f'{abs_path}pb/child_1.csv', 'w') as f1:
-            for k,i in child1.get_core_voc().items():
-              print(k, i, file=f1)
-          
-          with open(f'{abs_path}pb/child_2.csv', 'w') as f2:
-            for k,i in child2.get_core_voc().items():
-              print(k, i, file=f2)
-
-          with open(f'{abs_path}pb/new_child.csv', 'w') as f3:
-            for k,i in n_ind.get_core_voc().items():
-              print(k, i, file=f3)
-
-          child1.display('pb/child_1')
-          child2.display('pb/child_2')
-          n_ind.display('pb/new_child')
-
-          exit(0)
-
-        # check_voc(n_ind.get_core_voc(), n_ind)
-
-
-        # if check_voc(n_ind.get_core_voc(), n_ind):
-        #   with open(f'{abs_path}pb/child_1.csv', 'w') as f1:
-        #     for k,i in child1.get_core_voc().items():
-        #       print(k, i, file=f1)
-          
-        #   with open(f'{abs_path}pb/child_2.csv', 'w') as f2:
-        #     for k,i in child2.get_core_voc().items():
-        #       print(k, i, file=f2)
-
-        #   with open(f'{abs_path}pb/new_child.csv', 'w') as f3:
-        #     for k,i in n_ind.get_core_voc().items():
-        #       print(k, i, file=f3)
-
-        #   child1.display('pb/child_1')
-        #   child2.display('pb/child_2')
-        #   n_ind.display('pb/new_child')
-
-        #   exit(0)
-        
+        toolbox.evaluate(n_ind)        
         
         new_cx_individuals.append(n_ind)
-
-        # del child1.fitness.values
-        # del child2.fitness.values
 
     # m-à-j offspring    
     offspring.extend(new_cx_individuals)
@@ -1721,8 +1744,6 @@ def main(files):
     for ind, fit in zip(invalid_ind, fitnesses):
       ind.fitness.values = fit
 
-    # print(*[i.fitness.values for i in offspring])
-
     # remplacer l'ancienne population par la descendance
     pop = offspring
 
@@ -1740,28 +1761,21 @@ def main(files):
   # indice de l'individu avec la pire fitness
   index_max = np.argmax(fits)
 
-  indiv_min = pop[index_min]
-  indiv_max = pop[index_max]  
-
   c = 0
   print()
   for ind in pop:
     print(f'Path_{c}: {ind.best_path}')
-    ind.display(f'img/ind_{c}')
+    # ind.display(f'img/ind_{c}')
 
-    with open(f'{abs_path}data/ind_{c}.csv', 'w') as f:
-      # print(f'Path_{c}: {ind.best_path}', file=f)
-      # print(file=f)
-      for k,i in ind.get_core_voc().items():
-        print(k, i, file=f)
+  #   with open(f'{abs_path}data/ind_{c}.csv', 'w') as f:
+  #     # print(f'Path_{c}: {ind.best_path}', file=f)
+  #     # print(file=f)
+  #     for k,i in ind.get_core_voc().items():
+  #       print(k, i, file=f)
     c+=1
-  print()
-
-  # ind_min.display('MIN')
-  # ind_max.display('MAX')
 
   print()
-  print(fits)
+  print(f'Fits : {fits}')
   print()
 
   print("  Min %s" % min(fits))
@@ -1769,35 +1783,13 @@ def main(files):
   print("  Avg %s" % mean)
   print("  Std %s" % std)
 
-#****************************************************************************************************************
-
-
-# TESTING
-
-import pandas as pd
-pd.set_option('display.max_rows', 100)
-
-def check_voc(dict_att,grid):
-
-  df = pd.DataFrame(dict_att.values(), columns=['word', 'row', 'col', 'page', 'dest'])
-  df2 = df.groupby(['row', 'col', 'page']).size()
-  if sum(df2.values) != len(df2.values):
-    print(pd.DataFrame.from_dict(grid.get_core_voc(), orient='index').sort_values([3]))
-    raise Exception('COORDONÉES REPÉTÉES')
-    # return 1
-  print('check_voc OK...!')
-  # return 0
-
-
+#=========================================================================================================================
 ## TEST PIPELINE
 
 path1 = '/home/fran/mosig/internship/grid_gen/testing/'
 
 # noms des fichiers texte (corpus) de chaque grille 
 files = [f'{path1}grid_1_3p_raw.csv', f'{path1}grid_2_3p_raw.csv', f'{path1}grid_3_6p_raw.csv', f'{path1}grid_4_2p_raw.csv']
-
-# files = [f'{path1}g1_letters.csv', f'{path1}g2_letters.csv']
-# files = [f'{path1}grid_1_3p_raw.csv', f'{path2}Corrected_proloquo_FR_brut.csv']
 
 if __name__ == '__main__':
   main(files)
