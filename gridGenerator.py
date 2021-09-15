@@ -11,19 +11,16 @@
 
 # %matplotlib
 import matplotlib.pyplot as plt
-plt.rcParams['figure.figsize'] = [12, 12]
 import random
 import copy
 import math
 import numpy as np
-# import pandas as pd
 import sys
 from graphviz import Digraph
 
 # import time
 import networkx as nx
 from networkx import *
-# import os
 import pickle
 from argparse import ArgumentParser
 import pathlib
