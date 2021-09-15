@@ -1,0 +1,939 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="fr" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gridGenerator module &mdash; Documentation GridGenerator 0.1</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Recherche" href="search.html" />
+    <link rel="prev" title="Welcome to GridGenerator’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> GridGenerator
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Rechercher docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">gridGenerator module</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GridGenerator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>gridGenerator module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gridGenerator.rst.txt" rel="nofollow"> Afficher la source de la page</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-gridGenerator">
+<span id="gridgenerator-module"></span><h1>gridGenerator module<a class="headerlink" href="#module-gridGenerator" title="Lien permanent vers ce titre">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="gridGenerator.Grid">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">Grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Meta-classe représentant la structure complète d’un système de grilles de pictogrammes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> (<em>fichier / Dict</em>) – fichier <cite>.csv</cite> en format <cite>Augcom</cite> ou tableau d’attributes décrivant chaque pictogramme avec le format: {<cite>id_picto</cite> : [<cite>nom</cite>, <cite>ligne</cite>, <cite>colonne</cite>, <cite>page</cite>, <cite>destination</cite>]}</p></li>
+<li><p><strong>row_size</strong> (<em>entier</em>) – hauteur fixe de chaque page de la grille</p></li>
+<li><p><strong>col_size</strong> (<em>entier</em>) – longueur fixe de chaque page de la grille</p></li>
+</ul>
+</dd>
+<dt class="field-even">Lève</dt>
+<dd class="field-even"><p><strong>Exception</strong> – exception d’entrée incompatible</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.add_new_page">
+<span class="sig-name descname"><span class="pre">add_new_page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.add_new_page" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fonction d’encapsulation</p>
+<p>Ajoute une nouvelle page à la grille</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>chaîne de charactères</em>) – le nom de la nouvelle page</p>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>la page ajoutée</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>classe: <cite>Page</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.add_word_in_root">
+<span class="sig-name descname"><span class="pre">add_word_in_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.add_word_in_root" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Ajoute un nouveau pictogramme à la page d’accueil dans la première position disponible</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word</strong> (<em>chaîne de charactères</em>) – nom du pictogramme</p></li>
+<li><p><strong>dest</strong> (classe <cite>Page</cite>, optional) – page de destination du pictogramme, defaults to None</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.cross_pages">
+<span class="sig-name descname"><span class="pre">cross_pages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.cross_pages" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Croise deux pages et toutes les sous-pages analogues reliées entre elles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page1</strong> (classe: <cite>Page</cite>) – première page à croiser</p></li>
+<li><p><strong>page2</strong> (classe: <cite>Page</cite>) – deuxième page à croiser</p></li>
+<li><p><strong>parent</strong> (classe: <cite>Page</cite>, optional) – page de référence pour mettre en place les pictogrammes de retour. Cette page fait un appel récursive, defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>renvoie 3 choses: Un tableau contenant les attributes des pictos dans la page résultante,
+la page résultante et un tableau contenant les pictos non affectés à la page résultante lors du croissement</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>[type]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.display" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Méthode d’affichage 2</p>
+<p>Génére une image detaillé et intuitive de la structure de la grille. Il utilise Graphviz et le language DOT.
+Il export automatiquement l’image en format png au répértoire actuel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>chaîne de charactères</em><em>, </em><em>optional</em>) – le nom du fichier image produit, defaults to “default”</p>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>renvoie un graphe dirigé</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>classe: <cite>networkx.DiGraph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.fusion_with">
+<span class="sig-name descname"><span class="pre">fusion_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.fusion_with" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fusione aléatoirement les strutures analogues (pages) de deux grilles</p>
+<p>Fonction récursive. En partant des deux accueils, on compare chaque slot d’une page avec son analogue 
+dans l’autre page et choisit aléatoirement l’un d’entre eux.
+Par exemple, les slots situés à la position (2,3) dans les pages d’accueil de la première et la deuxième 
+grille sont utilisés pour définir le slot situé à (2,3) dans la page d’accueil de la grille résultante.
+Ainsi, pour chaque position il y a toujours un slot selectionné (ce qui va dans les pages de base de la 
+grille résultante) et un autre non-selectionné qui va dans des pages spécialement concues à ce propos (extra_pages).</p>
+<p>La grille résultante est une structure unique et indépéndante. Elle contient les pictogrammes des deux grilles
+originales.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>grid</strong> (classe: <cite>Grid</cite>) – la deuxième grille avec laquelle la grille actuelle va se fusioner</p>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>une nouvelle grille avec une nouvelle structure</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>classe: <cite>Grid</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.get_col_size">
+<span class="sig-name descname"><span class="pre">get_col_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.get_col_size" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Renvoie la longueur de la grille</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>nombre de colonnes</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>entier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.get_core_voc">
+<span class="sig-name descname"><span class="pre">get_core_voc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.get_core_voc" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Renvoie le tableau d’attributes décrivant tous les pictogrammes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>tableau d’attributes</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>Dict (format: {<cite>id_picto</cite>:[<cite>nom</cite>,`ligne`,`colonne`,`page`, <cite>page_dest</cite>]})</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.get_nb_pages">
+<span class="sig-name descname"><span class="pre">get_nb_pages</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.get_nb_pages" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Renvoie le nombre de pages contenues dans la grille</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>nombre total de pages</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>entier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.get_page">
+<span class="sig-name descname"><span class="pre">get_page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.get_page" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Renvoie la page avec le nom <cite>name</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>chaîne de charactères</em>) – nom de la page à chercher</p>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>la page concernée</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>classe: <cite>Page</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.get_page_dict">
+<span class="sig-name descname"><span class="pre">get_page_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.get_page_dict" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Renvoie le tableau de pages de la grille</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>tableau de pages</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>Dict (format: {<cite>page_name</cite>: chaine de charactères : <cite>page</cite>: classe <cite>Page</cite>})</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.get_page_names">
+<span class="sig-name descname"><span class="pre">get_page_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.get_page_names" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Renvoie la liste de noms de pages contenues dans la grille</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>liste de noms</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>Liste</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.get_root_page">
+<span class="sig-name descname"><span class="pre">get_root_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.get_root_page" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Obtient la page racine, qui est par défaut la page nommé <cite>accueil</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoi la page d’accueil</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>classe: <cite>Page</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.get_row_size">
+<span class="sig-name descname"><span class="pre">get_row_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.get_row_size" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Renvoie la hauteur de la grille</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>nombre de lignes</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>entier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.shuffle">
+<span class="sig-name descname"><span class="pre">shuffle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.shuffle" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Mélange les pictogrammes à l’intérieure de chaque page de la grille</p>
+<p>Change uniquement la distribution spaciale des pictogrammes d’une page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Lève</dt>
+<dd class="field-odd"><p><strong>Exception</strong> – capacité de la page dépassé</p>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>nouvelle grille</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>classe: <cite>Grid</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.to_graph">
+<span class="sig-name descname"><span class="pre">to_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.to_graph" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Génére un graphe décrivant la structure de la grille</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>un graphe dirigé</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>classe: <cite>networkx.DiGraph</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.to_text">
+<span class="sig-name descname"><span class="pre">to_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'grid_text.csv'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.to_text" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Crée un fichier texte (.csv) décrivant la grille en format AUGCOM.</p>
+<p>Voir le repo du projet pour plus d’information sur le format Augcom.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>output_name</strong> (<em>chaîne de charactères</em><em>, </em><em>optional</em>) – le nom du fichier résultant, defaults to “grid_text.csv”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Grid.update_leaf_picto">
+<span class="sig-name descname"><span class="pre">update_leaf_picto</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extra_page</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Grid.update_leaf_picto" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Affecte la page <cite>extra_page</cite> à un pictogramme disponible</p>
+<p>Recherche le premier pictogramme qui n’a pas de page de destination et mettre en place <cite>extra_page</cite> 
+comme destination.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>extra_page</strong> (classe: <cite>Page</cite>) – la page à affecter</p>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>Renvoie la page contenant le pictogramme trouvé.</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>classe: <cite>Page</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gridGenerator.Page">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">Page</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Une page est un arrangement 2D de slots avec une taille fixe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>chaîne de caractères</em>) – le nom de la page</p></li>
+<li><p><strong>row_size</strong> (<em>entier</em>) – La hauteur de la table (nombre de lignes)</p></li>
+<li><p><strong>col_size</strong> (<em>entier</em>) – La largueur de la table (nombre de colonnes)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.add_word">
+<span class="sig-name descname"><span class="pre">add_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">core</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.add_word" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Crée et ajoute un slot(pictogramme) dans le prochain emplacement disponible de la page</p>
+<p>Fonction récursive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word</strong> (<em>chaîne de charactères</em>) – nom du mot du pictogramme</p></li>
+<li><p><strong>core</strong> (<em>boolean</em><em>, </em><em>optional</em>) – indique si le mot est du voc de base, defaults to False</p></li>
+<li><p><strong>dest</strong> (classe: <cite>Page</cite>, optional) – page de destination du pictogramme, defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>renvoie le nom du mot si affectation possible, null sinon</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>chaîne de charactères</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.get_col_size">
+<span class="sig-name descname"><span class="pre">get_col_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.get_col_size" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Accesseur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoie la longueur de la page</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>entier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.get_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Accesseur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoie le nom actuel de la page</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>chaîne de charactères</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.get_pictograms">
+<span class="sig-name descname"><span class="pre">get_pictograms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.get_pictograms" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Obtiens les informations des pictogrammes dans la page</p>
+<p>Produit un tableau d’attributes contenant toutes les informations (nom, ligne, colonne, nom de page, page de destination) de chaque pictogramme de la page courante.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoie un tableau d’attributes</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.get_row_size">
+<span class="sig-name descname"><span class="pre">get_row_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.get_row_size" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Accesseur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoie la hauteur de la page</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>entier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.get_slot">
+<span class="sig-name descname"><span class="pre">get_slot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.get_slot" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Accesseur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoie le slot affecté à la position <cite>(num_row, num_col)</cite></p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>class: <cite>Slot</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.get_slot_list">
+<span class="sig-name descname"><span class="pre">get_slot_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.get_slot_list" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Accesseur</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoie la liste de slots de la page</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>Liste de Slots</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.is_free">
+<span class="sig-name descname"><span class="pre">is_free</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.is_free" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Retourne vrai si le slot à la position (<cite>num_row</cite>, <cite>num_col</cite>) est libre, faux sinon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_row</strong> (<em>entier</em>) – nombre de la ligne</p></li>
+<li><p><strong>num_col</strong> (<em>entier</em>) – nombre de la colonne</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>renvoie un bolean</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>bolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.is_full">
+<span class="sig-name descname"><span class="pre">is_full</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.is_full" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Retourne vrai si la table est pleine (aucun slot vide), faux sinon</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoie un bolean</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>bolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.set_name">
+<span class="sig-name descname"><span class="pre">set_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.set_name" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Setter. Mettre en place le nom de la page</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>chaîne de charactères</em>) – nom à mettre en place</p>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>renvoie le nom affecté</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>chaîne de charactères</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Page.set_slot">
+<span class="sig-name descname"><span class="pre">set_slot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_row</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_col</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Page.set_slot" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Setter. Ajoute le Slot <cite>slot</cite> en position <cite>num_row</cite>, <cite>num_col</cite> dans la page</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>slot</strong> (class <cite>Slot</cite>) – slot à mettre en place</p></li>
+<li><p><strong>num_row</strong> (<em>entier</em>) – nombre de la ligne</p></li>
+<li><p><strong>num_col</strong> (<em>entier</em>) – nombre de la colonne</p></li>
+</ul>
+</dd>
+<dt class="field-even">Lève</dt>
+<dd class="field-even"><p><strong>Exception</strong> – exception de dépassement des indices.</p>
+</dd>
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>renvoie l’ancienne valeur du slot</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>class <cite>Slot</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gridGenerator.Slot">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">Slot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_core</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_destination</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Slot" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Représente l’element le plus basique d’une grille.</p>
+<p>Il peut contenir un pictogramme ou être vide (None).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Word</dt>
+<dd class="field-odd"><p>mot lié au pictpgramme</p>
+</dd>
+<dt class="field-even">Is_core</dt>
+<dd class="field-even"><p>boolean qui indique si le mot associé fait partie du vocabulaire de base.</p>
+</dd>
+<dt class="field-odd">Page_destination</dt>
+<dd class="field-odd"><p>Eventuelle page de destination liée au pictogramme. Peut être nulle.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Slot.get_is_core">
+<span class="sig-name descname"><span class="pre">get_is_core</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Slot.get_is_core" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Accesseur</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>Renvoi le boolean <cite>is_core</cite> du slot</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Slot.get_page_destination">
+<span class="sig-name descname"><span class="pre">get_page_destination</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Slot.get_page_destination" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Accesseur</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>Renvoi la page de destination du slot</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>class: <cite>Page</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Slot.get_word">
+<span class="sig-name descname"><span class="pre">get_word</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Slot.get_word" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Accesseur</p>
+<dl class="field-list simple">
+<dt class="field-odd">Renvoie</dt>
+<dd class="field-odd"><p>Renvoi le mot lié au slot</p>
+</dd>
+<dt class="field-even">Type renvoyé</dt>
+<dd class="field-even"><p>châine de charactères</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Slot.set_page_destination">
+<span class="sig-name descname"><span class="pre">set_page_destination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Slot.set_page_destination" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Setter. Mettre en place la page de destination du slot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Page</dt>
+<dd class="field-odd"><p>page à mettre en place</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gridGenerator.Slot.set_word">
+<span class="sig-name descname"><span class="pre">set_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.Slot.set_word" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Setter. Mettre en place le mot du slot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Word</dt>
+<dd class="field-odd"><p>mot à metre en place</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="gridGenerator.WeightedPath">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">WeightedPath</span></span><a class="headerlink" href="#gridGenerator.WeightedPath" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Classe auxiliaire pour stocker le chemin et le coût lors du calcul du chemin optimale</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gridGenerator.compute_cost">
+<span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">compute_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_sentence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distances</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.compute_cost" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Calcule le coût associé à la phrase d’entrée utilisant les distances données en entrée</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_sentence</strong> (<em>chaîne de charactères</em>) – phrase d’entrée</p></li>
+<li><p><strong>distances</strong> (<em>chaîne de charactères</em>) – contient les distances entre chaque pictogramme</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>le meilleur chemin et le coût final</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>liste</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gridGenerator.compute_distances">
+<span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">compute_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">movement_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.compute_distances" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Calcule la distance entre chaque paire de pictogrammes à l’intérieure de chaque page d’une grille</p>
+<p>Prend en compte la difficulté du mouvement (movement_factor) et la difficulté de la sélection (selection_factor)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (classe: <cite>Grid</cite>) – grille à traiter</p></li>
+<li><p><strong>movement_factor</strong> (<em>entier</em><em>, </em><em>optional</em>) – facteur de difficulté du mouvement, defaults to 1</p></li>
+<li><p><strong>selection_factor</strong> (<em>entier</em><em>, </em><em>optional</em>) – facteur de difficulté de la sélection, defaults to 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>déscription textuelle des distances entre chaque pictogramme</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>chaîne de charactères</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gridGenerator.initialNode">
+<span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">initialNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodeList</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgeList</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.initialNode" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fonction qui établit le noeud à partir duquel il faut commencer à calculer un arc</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>chaîne de charactères</em>) – texte d’entrée</p></li>
+<li><p><strong>nodeList</strong> (<em>liste</em>) – liste de tous les noeuds du graphe</p></li>
+<li><p><strong>edgeList</strong> (<em>Dict</em>) – tableau associatif de tous les arcs avec en clé le noeud tête et en valeurs le noeud pointé et le poids de l’arc</p></li>
+<li><p><strong>G</strong> (classe: <cite>networkx.DiGraph</cite>) – graphe initial</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>liste avec le chemin et le poids total</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>liste</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gridGenerator.load_obj">
+<span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">load_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.load_obj" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fonction qui récupere un objet contenu dans un fichier .pkl</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>chaîne de charactères</em>) – nom du fichier cible</p>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>renvoie le fichier avec nom <cite>name</cite></p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gridGenerator.main">
+<span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">files</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sentence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_sz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_sz</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.main" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fonction principale qui implémente la boucle itérative de l’algorithme génétique</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><p><strong>files</strong> (<em>liste</em>) – liste de noms de fichiers source</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gridGenerator.save_obj">
+<span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">save_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.save_obj" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fonction qui stocke un objet dans un fichier .pkl</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> (<em>any</em>) – l’objet à stocker</p></li>
+<li><p><strong>name</strong> (<em>chaîne de charactères</em>) – nom du fichier créé</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gridGenerator.shortestPath">
+<span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">shortestPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialNode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sentance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodeList</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edgeList</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.shortestPath" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fonction de calcul du plus court path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initialNode</strong> (<em>Node</em>) – point de départ de la recherche dans le graphe</p></li>
+<li><p><strong>sentance</strong> (<em>chaîne de charactères</em>) – phrase d’entrée pour laquelle il faut calculer le cout de production</p></li>
+<li><p><strong>nodeList</strong> (<em>liste</em>) – liste de tous les noeuds du graphe</p></li>
+<li><p><strong>edgeList</strong> (<em>Dict</em>) – tableau associatif de tous les arcs avec en clé le noeud tête et en valeurs le noeud pointé et le weight de l’arc</p></li>
+<li><p><strong>G</strong> (<em>classe: networkx.DiGraph</em>) – graphe en question</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>objet contenant le chemin final et le coût final</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>classe: <cite>WeightedPath</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gridGenerator.textToNodes">
+<span class="sig-prename descclassname"><span class="pre">gridGenerator.</span></span><span class="sig-name descname"><span class="pre">textToNodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodeList</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gridGenerator.textToNodes" title="Lien permanent vers cette définition">¶</a></dt>
+<dd><p>Fonction qui prend en entrée un mot de la phrase et en fait une liste de noeuds possibles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramètres</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>word</strong> (<em>chaîne de charactères</em>) – chaque word de la phrase d’entrée</p></li>
+<li><p><strong>nodeList</strong> (<em>liste</em>) – liste de tous les noeuds du graphe</p></li>
+</ul>
+</dd>
+<dt class="field-even">Renvoie</dt>
+<dd class="field-even"><p>liste des noeuds canidats potentiels</p>
+</dd>
+<dt class="field-odd">Type renvoyé</dt>
+<dd class="field-odd"><p>liste</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to GridGenerator’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Précédent</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, CarlosVargas.
+
+    </p>
+  </div>
+    
+    
+    
+    Compilé avec <a href="https://www.sphinx-doc.org/">Sphinx</a> en utilisant un
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">thème</a>
+    
+    fourni par <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
