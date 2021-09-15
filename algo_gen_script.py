@@ -4,28 +4,29 @@
 #!python -m pip install graphviz
 #!python -m pip install pandas
 #!python -m pip install pudb
-# !python -m pip install nbconvert
-# !python -m pip install nbconvert -U
-# coding=utf-8
+#!python -m pip install nbconvert
+#!python -m pip install nbconvert -U
+#coding=utf-8
 
 
 # %matplotlib
-plt.rcParams['figure.figsize'] = [12, 12]
 import matplotlib.pyplot as plt
+plt.rcParams['figure.figsize'] = [12, 12]
 import random
 import copy
 import math
 import numpy as np
-import pandas as pd
+# import pandas as pd
 import sys
 from graphviz import Digraph
-import pylab
 
-import time
+# import time
 import networkx as nx
 from networkx import *
-import os
+# import os
 import pickle
+from argparse import ArgumentParser
+import pathlib
 
 # ALGORITHME GÉNÉTIQUE
 from deap import base
@@ -47,7 +48,8 @@ class Slot():
     '''
 
     def __init__(self, word, is_core, page_destination):        
-        '''Constructeur'''        
+        '''Constructeur        
+        '''        
 
         self.__word = copy.copy(word)
         self.__is_core = copy.copy(is_core)
@@ -57,7 +59,8 @@ class Slot():
         '''Accesseur
         
         :return: Renvoi le mot lié au slot
-        :rtype: châine de charactères'''
+        :rtype: châine de charactères        
+        '''
 
         return self.__word
 
@@ -65,7 +68,8 @@ class Slot():
         '''Accesseur
 
         :return: Renvoi le boolean `is_core` du slot
-        :rtype: boolean'''
+        :rtype: boolean        
+        '''
 
         return self.__is_core
 
@@ -73,7 +77,8 @@ class Slot():
         '''Accesseur
         
         :return: Renvoi la page de destination du slot
-        :rtype: class: `Page`'''
+        :rtype: class: `Page`        
+        '''
 
         return self.__page_destination
 
@@ -81,7 +86,7 @@ class Slot():
         '''Setter. Mettre en place le mot du slot
         
         :word: mot à metre en place
-        :type word: chaîne de caractères
+        :type word: chaîne de caractères        
         '''
 
         self.__word = word
@@ -90,7 +95,8 @@ class Slot():
         '''Setter. Mettre en place la page de destination du slot
         
         :page: page à mettre en place
-        :type page: class: `Page`'''
+        :type page: class: `Page`        
+        '''
 
         self.__page_destination = page
 
@@ -115,7 +121,7 @@ class Page():
     :type name: chaîne de caractères
     :param row_size: La hauteur de la table (nombre de lignes)
     :type row_size: entier
-    :param col_size: La largueur de la table (nombre de colognes)
+    :param col_size: La largueur de la table (nombre de colonnes)
     :type col_size: entier
     '''
 
@@ -1015,9 +1021,9 @@ class Grid():
 
     Change uniquement la distribution spaciale des pictogrammes d'une page. 
 
-    :raises Exception: [description]
-    :return: [description]
-    :rtype: [type]
+    :raises Exception: capacité de la page dépassé
+    :return: nouvelle grille 
+    :rtype: classe: `Grid`
     '''
 
     # copier le tableau d'attributes de la grille originale
@@ -1052,7 +1058,7 @@ class Grid():
             try:          
               row, col = coords_list.pop()
             except:              
-              raise Exception('Problème dans fonction shuffle(). Valider tableau d attributes')
+              raise Exception('Le nombre de pictogrammes dépasse la capacité de la page. Valider tableau d attributes')
             
             #affecter les nouvelles coordonnées aux pictos de la pag courante
             core_voc_copy[id][1] = row
@@ -1551,11 +1557,10 @@ def compute_cost(input_sentence, distances):
   return result
 
 #=========================================================================================================================
-
 # ALGORITHME GÉNÉTIQUE
 # Ici on utilise le framework de la librairie < Algorithmes évolutionnaires distribués en Python (DEAP) >
 
-# CX_PROB  est la probabilité avec laquelle deux individus se croisent
+# CX_PROB  est la probabilité avec laquelle deux individus se croissent
 # MUT_PROB est la probabilité de mutation d'un individu
 CX_PROB, MUT_PROB = 0.5, 0.5    
 
@@ -1570,115 +1575,112 @@ COL_SIZE = 4
 # NB_SELECTED_IND est le nombre d'individus qu'on va séléctioner dans chaque génération
 NB_SELECTED_IND = 5
 
-# phrase d'entrée
-sentence = 'je voyager train'
 
-
-def init_grid(container, source_file):
-  '''Initialise la grille dans le cadre de DEAP
-
-  :param container: structure qui encapsule les données dentrée
-  :type container: un conteneur
-  :param source_file: fichier/tableau source
-  :type source_file: fichier texte ou tableau d'attributes
-  :return: un conteneur avec les parametres d'entrée
-  :rtype: conteneur
-  '''
-  
-  return container(source_file, ROW_SIZE, ROW_SIZE)
-
-
-def init_population(container, func, source_file_list):
-  '''Initialise une population dans le cadre de DEAP
-
-  :param container: structure qui encapsule les données dentrée
-  :type container: un conteneur
-  :param func: une fonction qui va être utilisé sur le fichier source
-  :type func: fonction
-  :param source_file_list: liste de noms de fichiers source
-  :type source_file_list: liste
-  :return: un conteneur avec quelques parametres d'entrée
-  :rtype: conteneur
-  '''
-
-  return container(func(file) for file in source_file_list)
-
-
-#Créer le container pour la fonction de coût et les individus
-creator.create("FitnessMax", base.Fitness, weights=(1.0,))      ##todo: arrange weights quand plusieurs fitnesses (sentences) 
-creator.create("Individual", Grid, fitness=creator.FitnessMax, best_path=[])
-
-# Initialisateurs
-toolbox = base.Toolbox()
-toolbox.register("individual", init_grid, creator.Individual)
-toolbox.register("population", init_population, list, toolbox.individual)
-
-
-def evalProdCost(sentence, individual):
-  '''Fonction d'évaluation du coût de production dans le cadre de DEAP
-
-  :param sentence: phrase d'entrée
-  :type sentence: chaîne de charactères
-  :param individual: représentation d'une grille dans le cadre de DEAP
-  :type individual: classe: `toolbox.individual`
-  :return: renvoie le coût associé à `sentance` sur la grille `individual`  
-  :rtype: [type]
-  '''
-  distances = compute_distances(individual)
-  cost = compute_cost(sentence, distances)
-  # path = result[0][0]
-  # cost = result[0][1]
-  
-  individual.best_path = cost[0][0]
-          
-  return cost[0][1],    ##todo: plusieurs sentences
-
-
-def external_fusion(individual1, individual2): 
-  '''Fonction de fusion externe (DEAP)
-
-  :param individual1: première grille 
-  :type individual1: classe: `toolbox.individual`
-  :param individual2: deuxième grille
-  :type individual2: classe: `toolbox.individual`
-  :return: la grille résultante
-  :rtype: classe: `toolbox.individual`
-  '''
-  new_grid = individual1.fusion_with(individual2)  
-
-  return toolbox.individual(new_grid.get_core_voc())
-
-
-def internal_fusion(individual):
-  '''Fonction de fusion interne (DEAP)
-
-  :param individual: la grille concernée
-  :type individual: classe: `toolbox.individual`
-  :return: renvoie la grille résultante
-  :rtype: classe: `toolbox.individual`
-  '''
-
-  new_grid = individual.shuffle()
-
-  return toolbox.individual(new_grid.get_core_voc())
-
-
-# Operateurs génétiques
-toolbox.register("evaluate", evalProdCost, sentence)
-toolbox.register("mate", external_fusion)
-toolbox.register("mutate", internal_fusion)
-toolbox.register("select", tools.selBest)
-
-
-#=========================================================================================================================
-#PIPEPLINE
-
-def main(files):
+def main(files, sentence, row_sz, col_sz, score_threshold, max_iter):
   '''Fonction principale qui implémente la boucle itérative de l'algorithme génétique
 
   :param files: liste de noms de fichiers source
   :type files: liste
   '''
+
+  def init_grid(container, source_file):
+    '''Initialise la grille dans le cadre de DEAP
+
+    :param container: structure qui encapsule les données dentrée
+    :type container: un conteneur
+    :param source_file: fichier/tableau source
+    :type source_file: fichier texte ou tableau d'attributes
+    :return: un conteneur avec les parametres d'entrée
+    :rtype: conteneur
+    '''
+    
+    return container(source_file, row_sz, col_sz)
+
+
+  def init_population(container, func, source_file_list):
+    '''Initialise une population dans le cadre de DEAP
+
+    :param container: structure qui encapsule les données dentrée
+    :type container: un conteneur
+    :param func: une fonction qui va être utilisé sur le fichier source
+    :type func: fonction
+    :param source_file_list: liste de noms de fichiers source
+    :type source_file_list: liste
+    :return: un conteneur avec quelques parametres d'entrée
+    :rtype: conteneur
+    '''
+
+    return container(func(file) for file in source_file_list)
+
+
+  #Créer le container pour la fonction de coût et les individus
+  creator.create("FitnessMax", base.Fitness, weights=(1.0,))      ##todo: arrange weights quand plusieurs fitnesses (sentences) 
+  creator.create("Individual", Grid, fitness=creator.FitnessMax, best_path=[])
+
+  # Initialisateurs
+  toolbox = base.Toolbox()
+  toolbox.register("individual", init_grid, creator.Individual)
+  toolbox.register("population", init_population, list, toolbox.individual)
+
+
+  def evalProdCost(phrase, individual):
+    '''Fonction d'évaluation du coût de production dans le cadre de DEAP
+
+    :param phrase: phrase d'entrée
+    :type phrase: chaîne de charactères
+    :param individual: représentation d'une grille dans le cadre de DEAP
+    :type individual: classe: `toolbox.individual`
+    :return: renvoie le coût associé à `sentance` sur la grille `individual`  
+    :rtype: [type]
+    '''
+    distances = compute_distances(individual)
+    cost = compute_cost(phrase, distances)
+    # path = result[0][0]
+    # cost = result[0][1]
+    
+    individual.best_path = cost[0][0]
+            
+    return cost[0][1],    ##todo: plusieurs phrases
+
+
+  def external_fusion(individual1, individual2): 
+    '''Fonction de fusion externe (DEAP)
+
+    :param individual1: première grille 
+    :type individual1: classe: `toolbox.individual`
+    :param individual2: deuxième grille
+    :type individual2: classe: `toolbox.individual`
+    :return: la grille résultante
+    :rtype: classe: `toolbox.individual`
+    '''
+    new_grid = individual1.fusion_with(individual2)  
+
+    return toolbox.individual(new_grid.get_core_voc())
+
+
+  def internal_fusion(individual):
+    '''Fonction de fusion interne (DEAP)
+
+    :param individual: la grille concernée
+    :type individual: classe: `toolbox.individual`
+    :return: renvoie la grille résultante
+    :rtype: classe: `toolbox.individual`
+    '''
+
+    new_grid = individual.shuffle()
+
+    return toolbox.individual(new_grid.get_core_voc())
+
+
+  # Operateurs génétiques
+  toolbox.register("evaluate", evalProdCost, sentence)
+  toolbox.register("mate", external_fusion)
+  toolbox.register("mutate", internal_fusion)
+  toolbox.register("select", tools.selBest)
+
+
+#=========================================================================================================================
+#PIPEPLINE DE L'ALGORITHME GÉNÉTIQUE
 
   #Création de la population
   pop = toolbox.population(files)
@@ -1693,16 +1695,13 @@ def main(files):
   # Extraction de toutes les fitnesses
   fits = [ind.fitness.values[0] for ind in pop]
 
-  # # Extraction de tous les chemins optimales
-  # optimal_paths = [ind]
-
   # Variable permettant de suivre le nombre de générations
   g = 0
 
   # Commencez l'évolution ***
   
-  # évoluer jusqu'à ce qu'un individu atteigne SCORE_THRESHOLD ou que le nombre de générations atteigne MAX_ITER
-  while max(fits) > SCORE_THRESHOLD and g < MAX_ITER:
+  # évoluer jusqu'à ce qu'un individu atteigne `score_threshold` ou que le nombre de générations atteigne `max_iter`
+  while max(fits) > score_threshold and g < max_iter:
     # A new generation
     g = g + 1
     print("-- Generation %i --" % g)
@@ -1725,7 +1724,7 @@ def main(files):
     offspring.extend(new_cx_individuals)
 
     # *****************************************************************************
-    # MUTATION (REORGANISATION INTERNE)
+    # MUTATION (REORGANISATION INTERNE)     TO-DO: Déboguer
     # new_mut_individuals = []
     # for mutant in offspring:
     #   if random.random() < MUT_PROB:
@@ -1763,6 +1762,7 @@ def main(files):
 
   c = 0
   print()
+  print('Chemins optimales de la population finale: \n')
   for ind in pop:
     print(f'Path_{c}: {ind.best_path}')
     # ind.display(f'img/ind_{c}')
@@ -1775,24 +1775,72 @@ def main(files):
     c+=1
 
   print()
-  print(f'Fits : {fits}')
+  print(f'Coûts de production de la population finale: \n')
+  print(fits)
   print()
 
+  print('Statistiques de la population finale;')
   print("  Min %s" % min(fits))
   print("  Max %s" % max(fits))
   print("  Avg %s" % mean)
   print("  Std %s" % std)
 
 #=========================================================================================================================
-## TEST PIPELINE
 
-path1 = '/home/fran/mosig/internship/grid_gen/testing/'
+if __name__ == '__main__':  
 
-# noms des fichiers texte (corpus) de chaque grille 
-files = [f'{path1}grid_1_3p_raw.csv', f'{path1}grid_2_3p_raw.csv', f'{path1}grid_3_6p_raw.csv', f'{path1}grid_4_2p_raw.csv']
+  # créer un parser pour obtenir l'information nécessaire de l'utilisateur
+  parser = ArgumentParser()
 
-if __name__ == '__main__':
-  main(files)
+  # ajouter des arguments
+  parser.add_argument("-f", "--filelist", default='liste_sources.csv', 
+                      help="écrire le nom du fichier contenant les noms de fichiers source liés aux grilles de départ.")
+  parser.add_argument("-s", "--sentence", default='phrase.txt',
+                      help="écrire le nom du fichier contenant la phrase d'entrée")
+  parser.add_argument("-nl", "--nblignes", default=ROW_SIZE, type=int,
+                      help="écrire le nombre de lignes d'une page de la grille. Défaut=4")
+  parser.add_argument("-nc", "--nbcolonnes", default=COL_SIZE, type=int,
+                      help="écrire le nombre de colonnes d'une page de la grille. Défaut=4")
+  parser.add_argument("-th", "--threshold", default=SCORE_THRESHOLD, type=float,
+                      help="écrire le seuil de coût qu'arrête l'algorithme quant est atteint")
+  parser.add_argument("-mi", "--maxiter", default=MAX_ITER, type=int,
+                      help="écrire le seuil d'itérations qu'arrête l'algorithme quant est atteint")
 
+  # extraire les valeurs des arguments
+  args = parser.parse_args()
 
+  # validation des fichiers texte
+  if not (args.filelist.endswith('.csv') or args.filelist.endswith('.txt')):
+    print(f'Extention du fichier source << {args.filelist} >> non compatible. Utilise .csv ou .txt')
+    sys.exit(0)
+  
+  if not (args.sentence.endswith('.csv') or args.sentence.endswith('.txt')):
+    print(f'Extension du fichier de la phrase d entrée << {args.sentence} >> non compatible. Utilise .csv ou .txt')
+    sys.exit(0)
+  
+  # Paramètres d'entrée 
+  grids_source_list = []
+  sentence = ''
+  row_size = args.nblignes
+  col_size = args.nbcolonnes
+  threshold = args.threshold
+  maxiter = args.maxiter
 
+  # extraire la liste de fichiers source
+  with open(f'{args.filelist}') as file1:
+    for line in file1:
+      l = line.split(',')
+      for item in l:
+        fichier = item.strip()
+        grids_source_list.append(fichier)
+
+  # extraire la phrase d'entrée
+  with open(args.sentence) as file2:
+    for line in file2:
+      l = line.split(',')
+      for item in l:
+        phrase = item.strip()
+        sentence += f'{phrase}\n'
+
+  # executer le programme principale
+  main(grids_source_list, sentence, row_size, col_size, threshold, maxiter)
