@@ -1,1 +1,0 @@
-['accueil', 'je@accueil', 'voyager@accueil', 'train@accueil'] 6.650281539872885
