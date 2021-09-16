@@ -23,7 +23,7 @@ import networkx as nx
 from networkx import *
 import pickle
 from argparse import ArgumentParser
-import pathlib
+# import pathlib
 
 # ALGORITHME GÉNÉTIQUE
 from deap import base
@@ -1718,7 +1718,7 @@ def main(files, sentence, row_sz, col_sz, score_threshold, max_iter):
     offspring.extend(new_cx_individuals)
 
     # *****************************************************************************
-    # MUTATION (REORGANISATION INTERNE)     TO-DO: Déboguer
+    # MUTATION (SHUFFLE)     TO-DO: Déboguer
     # new_mut_individuals = []
     # for mutant in offspring:
     #   if random.random() < MUT_PROB:
@@ -1756,10 +1756,12 @@ def main(files, sentence, row_sz, col_sz, score_threshold, max_iter):
 
   c = 0
   print()
-  print('Chemins optimales de la population finale: \n')
+  print('Optimal paths of the final population: \n')
   for ind in pop:
     print(f'Path_{c}: {ind.best_path}')
-    # ind.display(f'img/ind_{c}')
+
+  ## OUTILS DE DÉBOGAGE -----------------------------------------
+  #   ind.display(f'img/ind_{c}')  
 
   #   with open(f'{abs_path}data/ind_{c}.csv', 'w') as f:
   #     # print(f'Path_{c}: {ind.best_path}', file=f)
@@ -1769,11 +1771,11 @@ def main(files, sentence, row_sz, col_sz, score_threshold, max_iter):
     c+=1
 
   print()
-  print(f'Coûts de production de la population finale: \n')
+  print(f'Production costs of the final population: \n')
   print(fits)
   print()
 
-  print('Statistiques de la population finale;')
+  print('Final population statistics;')
   print("  Min %s" % min(fits))
   print("  Max %s" % max(fits))
   print("  Avg %s" % mean)
@@ -1788,17 +1790,17 @@ if __name__ == '__main__':
 
   # ajouter des arguments
   parser.add_argument("-f", "--filelist", default='liste_sources.csv', 
-                      help="écrire le nom du fichier contenant les noms de fichiers source liés aux grilles de départ.")
+                      help="write the name of the file containing the names of the source files linked to the starting grids")
   parser.add_argument("-s", "--sentence", default='phrase.txt',
-                      help="écrire le nom du fichier contenant la phrase d'entrée")
-  parser.add_argument("-nl", "--nblignes", default=ROW_SIZE, type=int,
-                      help="écrire le nombre de lignes d'une page de la grille. Défaut=4")
-  parser.add_argument("-nc", "--nbcolonnes", default=COL_SIZE, type=int,
-                      help="écrire le nombre de colonnes d'une page de la grille. Défaut=4")
+                      help="write the name of the file containing the input phrase")
+  parser.add_argument("-nl", "--nblines", default=ROW_SIZE, type=int,
+                      help="write the number of lines on a page of the grid. Default=4")
+  parser.add_argument("-nc", "--nbcolumns", default=COL_SIZE, type=int,
+                      help="write the number of columns of a page of the grid. Default=4")
   parser.add_argument("-th", "--threshold", default=SCORE_THRESHOLD, type=float,
-                      help="écrire le seuil de coût qu'arrête l'algorithme quant est atteint")
+                      help="write the cost threshold that stops the algorithm when reached")
   parser.add_argument("-mi", "--maxiter", default=MAX_ITER, type=int,
-                      help="écrire le seuil d'itérations qu'arrête l'algorithme quant est atteint")
+                      help="write the threshold of iterations that stops the algorithm when reached")
 
   # extraire les valeurs des arguments
   args = parser.parse_args()

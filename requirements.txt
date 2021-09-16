@@ -1,0 +1,14 @@
+backports.functools-lru-cache==1.6.1
+cycler==0.10.0
+decorator==5.0.9
+kiwisolver==1.3.2
+matplotlib==3.4.3
+networkx==2.5.1
+numpy==1.21.2
+pyparsing==2.4.7
+python-dateutil==2.8.2
+pytz==2021.1
+six==1.16.0
+graphviz==0.16
+pickle==0.7.5
+deap==1.3.1
